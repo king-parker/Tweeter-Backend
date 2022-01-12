@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+}
+
+group 'edu.byu.cs.tweeter'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':shared')
+    compile 'com.google.code.gson:gson:2.8.6'
+    compile 'com.amazonaws:aws-lambda-java-core:1.2.0'
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.5.2'
+    testCompile 'org.mockito:mockito-all:1.10.19'
+}
