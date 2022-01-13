@@ -1,8 +1,19 @@
 #!/bin/bash
 arr=(
-        "getFollowing"
-        "getFeed"
+        "register"
         "login"
+        "logout"
+        "getUser"
+        "postStatus"
+        "getFeed"
+        "getStory"
+        "getFollowers"
+        "getFollowing"
+        "getFollowersCount"
+        "getFollowingCount"
+        "isFollower"
+        "follow"
+        "unfollow"
     )
 for FUNCTION_NAME in "${arr[@]}"
 do
