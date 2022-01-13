@@ -41,7 +41,7 @@ public class Service {
      *
      * @return the instance.
      */
-    public FollowDAO getFollowDAO() {
+    public FollowDAO getFollowingDAO() {
         return new FollowDAO();
     }
 
