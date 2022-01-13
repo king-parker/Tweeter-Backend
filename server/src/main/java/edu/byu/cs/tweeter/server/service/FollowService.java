@@ -7,7 +7,7 @@ import edu.byu.cs.tweeter.server.dao.FollowDAO;
 /**
  * Contains the business logic for getting the users a user is following.
  */
-public class FollowService {
+public class FollowService extends Service {
 
     /**
      * Returns the users that the user specified in the request is following. Uses information in
@@ -20,16 +20,5 @@ public class FollowService {
      */
     public FollowingResponse getFollowees(FollowingRequest request) {
         return getFollowingDAO().getFollowees(request);
-    }
-
-    /**
-     * Returns an instance of {@link FollowDAO}. Allows mocking of the FollowDAO class
-     * for testing purposes. All usages of FollowDAO should get their FollowDAO
-     * instance from this method to allow for mocking of the instance.
-     *
-     * @return the instance.
-     */
-    FollowDAO getFollowingDAO() {
-        return new FollowDAO();
     }
 }
