@@ -9,7 +9,7 @@ import edu.byu.cs.tweeter.server.util.FakeData;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FeedDAO {
+public class FeedDAO extends DAO {
 
     public Integer getFeedCount(User currUser) {
         // TODO: uses the dummy data.  Replace with a real implementation.
@@ -60,13 +60,5 @@ public class FeedDAO {
         }
 
         return feedStatusIndex;
-    }
-
-    List<Status> getDummyFeed() {
-        return getFakeData().getFakeStatuses();
-    }
-
-    FakeData getFakeData() {
-        return new FakeData();
     }
 }
