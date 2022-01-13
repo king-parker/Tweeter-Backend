@@ -6,43 +6,19 @@ import edu.byu.cs.tweeter.model.net.request.LoginRequest;
 import edu.byu.cs.tweeter.model.net.response.LoginResponse;
 import edu.byu.cs.tweeter.server.util.FakeData;
 
-public class UserService {
+public class UserService extends Service {
 
     public LoginResponse login(LoginRequest request) {
 
+        if (request.getUsername() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No username");
+        if (request.getPassword() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No password");
+
         // TODO: Generates dummy data. Replace with a real implementation.
-        User user = getDummyUser();
-        AuthToken authToken = getDummyAuthToken();
+        User user = getUserDAO().getLoginUser(request.getUsername(), request.getPassword());
+
+        if (user == null) throw new RuntimeException(BAD_REQUEST_TAG + " Username and password do not match");
+
+        AuthToken authToken = getAuthDAO().generateLoginToken(request.getUsername());
         return new LoginResponse(user, authToken);
-    }
-
-    /**
-     * Returns the dummy user to be returned by the login operation.
-     * This is written as a separate method to allow mocking of the dummy user.
-     *
-     * @return a dummy user.
-     */
-    User getDummyUser() {
-        return getFakeData().getFirstUser();
-    }
-
-    /**
-     * Returns the dummy auth token to be returned by the login operation.
-     * This is written as a separate method to allow mocking of the dummy auth token.
-     *
-     * @return a dummy auth token.
-     */
-    AuthToken getDummyAuthToken() {
-        return getFakeData().getAuthToken();
-    }
-
-    /**
-     * Returns the {@link FakeData} object used to generate dummy users and auth tokens.
-     * This is written as a separate method to allow mocking of the {@link FakeData}.
-     *
-     * @return a {@link FakeData} instance.
-     */
-    FakeData getFakeData() {
-        return new FakeData();
     }
 }

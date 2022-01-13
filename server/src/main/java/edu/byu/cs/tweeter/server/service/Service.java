@@ -13,6 +13,17 @@ public class Service {
     public static final String SERVER_ERROR_TAG = "[InternalServerError]";
 
     /**
+     * Returns an instance of {@link AuthDAO}. Allows mocking of the AuthDAO class
+     * for testing purposes. All usages of AuthDAO should get their AuthDAO
+     * instance from this method to allow for mocking of the instance.
+     *
+     * @return the instance.
+     */
+    public AuthDAO getAuthDAO() {
+        return new AuthDAO();
+    }
+
+    /**
      * Returns an instance of {@link FeedDAO}. Allows mocking of the FeedDAO class
      * for testing purposes. All usages of FeedDAO should get their FeedDAO
      * instance from this method to allow for mocking of the instance.
@@ -30,7 +41,7 @@ public class Service {
      *
      * @return the instance.
      */
-    public FollowDAO getFollowingDAO() {
+    public FollowDAO getFollowDAO() {
         return new FollowDAO();
     }
 
