@@ -6,14 +6,16 @@ import edu.byu.cs.tweeter.model.domain.Status;
 public class FeedRequest {
 
     private AuthToken authToken;
+    private String currUserAlias;
     private String followerAlias;
-    private int limit;
+    private Integer limit;
     private Status lastFeedStatus;
 
     private FeedRequest() { }
 
-    public FeedRequest(AuthToken authToken, String followerAlias, int limit, Status lastFeedStatus) {
+    public FeedRequest(AuthToken authToken, String currUserAlias, String followerAlias, int limit, Status lastFeedStatus) {
         this.authToken = authToken;
+        this.currUserAlias = currUserAlias;
         this.followerAlias = followerAlias;
         this.limit = limit;
         this.lastFeedStatus = lastFeedStatus;
@@ -27,6 +29,14 @@ public class FeedRequest {
         this.authToken = authToken;
     }
 
+    public String getCurrUserAlias() {
+        return currUserAlias;
+    }
+
+    public void setCurrUserAlias(String currUserAlias) {
+        this.currUserAlias = currUserAlias;
+    }
+
     public String getFollowerAlias() {
         return followerAlias;
     }
@@ -35,11 +45,11 @@ public class FeedRequest {
         this.followerAlias = followerAlias;
     }
 
-    public int getLimit() {
+    public Integer getLimit() {
         return limit;
     }
 
-    public void setLimit(int limit) {
+    public void setLimit(Integer limit) {
         this.limit = limit;
     }
 
