@@ -50,6 +50,16 @@ public class DAO {
     }
 
     /**
+     * Returns the list of dummy story data. This is written as a separate method to allow
+     * mocking of the story.
+     *
+     * @return the story.
+     */
+    List<Status> getDummyStory() {
+        return getFakeData().getFakeStatuses();
+    }
+
+    /**
      * Returns the {@link FakeData} object used to generate data.
      * This is written as a separate method to allow mocking of the {@link FakeData}.
      *

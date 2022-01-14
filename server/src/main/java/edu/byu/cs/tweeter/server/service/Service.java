@@ -1,9 +1,6 @@
 package edu.byu.cs.tweeter.server.service;
 
-import edu.byu.cs.tweeter.server.dao.AuthDAO;
-import edu.byu.cs.tweeter.server.dao.FeedDAO;
-import edu.byu.cs.tweeter.server.dao.FollowDAO;
-import edu.byu.cs.tweeter.server.dao.UserDAO;
+import edu.byu.cs.tweeter.server.dao.*;
 
 public class Service {
 
@@ -43,6 +40,17 @@ public class Service {
      */
     public FollowDAO getFollowingDAO() {
         return new FollowDAO();
+    }
+
+    /**
+     * Returns an instance of {@link StoryDAO}. Allows mocking of the StoryDAO class
+     * for testing purposes. All usages of StoryDAO should get their StoryDAO
+     * instance from this method to allow for mocking of the instance.
+     *
+     * @return the instance.
+     */
+    public StoryDAO getStoryDAO() {
+        return new StoryDAO();
     }
 
     /**
