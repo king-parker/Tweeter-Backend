@@ -1,6 +1,8 @@
 package edu.byu.cs.tweeter.server.service;
 
+import edu.byu.cs.tweeter.model.net.request.FollowerRequest;
 import edu.byu.cs.tweeter.model.net.request.FollowingRequest;
+import edu.byu.cs.tweeter.model.net.response.FollowerResponse;
 import edu.byu.cs.tweeter.model.net.response.FollowingResponse;
 import edu.byu.cs.tweeter.server.dao.FollowDAO;
 
@@ -27,5 +29,25 @@ public class FollowService extends Service {
             throw new RuntimeException(AUTH_ERROR_TAG + " Unauthenticated request");
 
         return getFollowingDAO().getFollowees(request);
+    }
+
+    /**
+     * Returns the users that the user specified in the request is followed by. Uses information in
+     * the request object to limit the number of followers returned and to return the next set of
+     * followers after any that were returned in a previous request. Uses the {@link FollowDAO} to
+     * get the followers.
+     *
+     * @param request contains the data required to fulfill the request.
+     * @return the followers.
+     */
+    public FollowerResponse getFollowers(FollowerRequest request) {
+
+        if (request.getCurrUserAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No current user listed");
+        if (request.getFolloweeAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No user provided");
+        if (request.getLimit() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No provided limit");
+        if (!getAuthDAO().isValidAuthToken(request.getCurrUserAlias(), request.getAuthToken()))
+            throw new RuntimeException(AUTH_ERROR_TAG + " Unauthenticated request");
+
+        return getFollowingDAO().getFollowers(request);
     }
 }

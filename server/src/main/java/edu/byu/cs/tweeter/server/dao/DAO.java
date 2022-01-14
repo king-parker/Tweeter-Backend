@@ -40,6 +40,16 @@ public class DAO {
     }
 
     /**
+     * Returns the list of dummy follower data. This is written as a separate method to allow
+     * mocking of the followers.
+     *
+     * @return the followers.
+     */
+    List<User> getDummyFollowers() {
+        return getFakeData().getFakeUsers();
+    }
+
+    /**
      * Returns the list of dummy feed data. This is written as a separate method to allow
      * mocking of the feed.
      *
