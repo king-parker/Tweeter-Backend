@@ -21,7 +21,7 @@ public class FollowService extends Service {
     public FollowingResponse getFollowees(FollowingRequest request) {
 
         authenticateRequest(request);
-        if (request.getFollowerAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No user provided");
+        if (request.getFollowerAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No selected user provided");
         if (request.getLimit() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No provided limit");
 
         return getFollowingDAO().getFollowees(request);
@@ -39,7 +39,7 @@ public class FollowService extends Service {
     public FollowerResponse getFollowers(FollowerRequest request) {
 
         authenticateRequest(request);
-        if (request.getFolloweeAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No user provided");
+        if (request.getFolloweeAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No selected user provided");
         if (request.getLimit() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No provided limit");
 
         return getFollowingDAO().getFollowers(request);
@@ -48,6 +48,7 @@ public class FollowService extends Service {
     public FollowingCountResponse getFollowingCount(FollowingCountRequest request) {
 
         authenticateRequest(request);
+        if (request.getFollowerAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No selected user provided");
 
         int count = getFollowingDAO().getFolloweeCount(request.getCurrUserAlias());
         return new FollowingCountResponse(count);
@@ -56,6 +57,7 @@ public class FollowService extends Service {
     public FollowersCountResponse getFollowersCount(FollowersCountRequest request) {
 
         authenticateRequest(request);
+        if (request.getFolloweeAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No selected user provided");
 
         int count = getFollowingDAO().getFollowerCount(request.getCurrUserAlias());
         return new FollowersCountResponse(count);
