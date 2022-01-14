@@ -19,13 +19,13 @@ public class FollowDAO extends DAO {
      * Gets the count of users from the database that the user specified is following. The
      * current implementation uses generated data and doesn't actually access a database.
      *
-     * @param follower the User whose count of how many following is desired.
+     * @param followerAlias the User whose count of how many following is desired.
      * @return said count.
      */
-    public Integer getFolloweeCount(User follower) {
+    public Integer getFolloweeCount(String followerAlias) {
         // TODO: uses the dummy data.  Replace with a real implementation.
-        assert follower != null;
-        return getDummyFollowees().size();
+        assert followerAlias != null;
+        return getDummyFollowees().size() + 1;
     }
 
     /**
@@ -97,13 +97,13 @@ public class FollowDAO extends DAO {
      * Gets the count of users from the database that the user specified is followed by. The
      * current implementation uses generated data and doesn't actually access a database.
      *
-     * @param followee the User whose count of how many following is desired.
+     * @param followeeAlias the User whose count of how many following is desired.
      * @return said count.
      */
-    public Integer getFollowerCount(User followee) {
+    public Integer getFollowerCount(String followeeAlias) {
         // TODO: uses the dummy data.  Replace with a real implementation.
-        assert followee != null;
-        return getDummyFollowers().size();
+        assert followeeAlias != null;
+        return getDummyFollowers().size() - 1;
     }
 
     /**

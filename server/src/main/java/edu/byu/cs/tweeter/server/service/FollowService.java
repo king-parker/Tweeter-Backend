@@ -1,8 +1,12 @@
 package edu.byu.cs.tweeter.server.service;
 
 import edu.byu.cs.tweeter.model.net.request.FollowerRequest;
+import edu.byu.cs.tweeter.model.net.request.FollowersCountRequest;
+import edu.byu.cs.tweeter.model.net.request.FollowingCountRequest;
 import edu.byu.cs.tweeter.model.net.request.FollowingRequest;
 import edu.byu.cs.tweeter.model.net.response.FollowerResponse;
+import edu.byu.cs.tweeter.model.net.response.FollowersCountResponse;
+import edu.byu.cs.tweeter.model.net.response.FollowingCountResponse;
 import edu.byu.cs.tweeter.model.net.response.FollowingResponse;
 import edu.byu.cs.tweeter.server.dao.FollowDAO;
 
@@ -49,5 +53,25 @@ public class FollowService extends Service {
             throw new RuntimeException(AUTH_ERROR_TAG + " Unauthenticated request");
 
         return getFollowingDAO().getFollowers(request);
+    }
+
+    public FollowingCountResponse getFollowingCount(FollowingCountRequest request) {
+
+        if (request.getCurrUserAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No current user listed");
+        if (!getAuthDAO().isValidAuthToken(request.getCurrUserAlias(), request.getAuthToken()))
+            throw new RuntimeException(AUTH_ERROR_TAG + " Unauthenticated request");
+
+        int count = getFollowingDAO().getFolloweeCount(request.getCurrUserAlias());
+        return new FollowingCountResponse(count);
+    }
+
+    public FollowersCountResponse getFollowersCount(FollowersCountRequest request) {
+
+        if (request.getCurrUserAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No current user listed");
+        if (!getAuthDAO().isValidAuthToken(request.getCurrUserAlias(), request.getAuthToken()))
+            throw new RuntimeException(AUTH_ERROR_TAG + " Unauthenticated request");
+
+        int count = getFollowingDAO().getFollowerCount(request.getCurrUserAlias());
+        return new FollowersCountResponse(count);
     }
 }
