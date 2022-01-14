@@ -80,4 +80,25 @@ public class FollowService extends Service {
         boolean isFollower = getFollowingDAO().isFollower(request.getFollowerAlias(), request.getFolloweeAlias());
         return new IsFollowingResponse(isFollower);
     }
+
+    public FollowResponse follow(FollowRequest request) {
+
+        if (request.getCurrUserAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No current user listed");
+        if (!getAuthDAO().isValidAuthToken(request.getCurrUserAlias(), request.getAuthToken()))
+            throw new RuntimeException(AUTH_ERROR_TAG + " Unauthenticated request");
+        if (request.getFollowerAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No following user listed");
+        if (request.getFolloweeAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No followed user listed");
+
+        return getFollowingDAO().follow(request.getFollowerAlias(), request.getFolloweeAlias());
+    }
+
+    public UnfollowResponse unfollow(UnfollowRequest request) {
+
+        if (request.getCurrUserAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No current user listed");
+        if (!getAuthDAO().isValidAuthToken(request.getCurrUserAlias(), request.getAuthToken()))
+            throw new RuntimeException(AUTH_ERROR_TAG + " Unauthenticated request");
+        if (request.getFollowerAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No following user listed");
+        if (request.getUnfolloweeAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No unfollowed user listed");
+
+        return getFollowingDAO().unfollow(request.getFollowerAlias(), request.getUnfolloweeAlias());}
 }
