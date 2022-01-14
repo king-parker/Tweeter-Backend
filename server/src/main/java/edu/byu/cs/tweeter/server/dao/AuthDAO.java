@@ -13,4 +13,8 @@ public class AuthDAO extends DAO {
         // TODO: Change to actual logic instead of dummy data
         return getDummyAuthToken();
     }
+
+    public void endUserSession(AuthToken authToken) {
+        // TODO: Change to actual logic
+    }
 }
