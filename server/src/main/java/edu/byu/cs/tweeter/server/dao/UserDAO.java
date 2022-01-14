@@ -13,4 +13,11 @@ public class UserDAO extends DAO {
         if (username.equals("@BadLogin")) return null;
         else return getDummyUser();
     }
+
+    public User registerNewUser(String firstName, String lastName, String username, String password, String imageBytesBase64) {
+        // TODO: Generates dummy data. Replace with a real implementation.
+        //  Also, the image string needs to get decoded somewhere
+        if (username.equals("@BadLogin")) return null;
+        else return getDummyUser();
+    }
 }
