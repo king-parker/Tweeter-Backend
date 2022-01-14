@@ -1,5 +1,6 @@
 package edu.byu.cs.tweeter.server.service;
 
+import edu.byu.cs.tweeter.model.net.request.AuthorizedRequest;
 import edu.byu.cs.tweeter.server.dao.*;
 
 public class Service {
@@ -62,5 +63,11 @@ public class Service {
      */
     public UserDAO getUserDAO() {
         return new UserDAO();
+    }
+
+    public void authenticateRequest(AuthorizedRequest request) {
+        if (request.getCurrUserAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No current user listed");
+        if (!getAuthDAO().isValidAuthToken(request.getCurrUserAlias(), request.getAuthToken()))
+            throw new RuntimeException(AUTH_ERROR_TAG + " Unauthenticated request");
     }
 }

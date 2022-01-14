@@ -11,9 +11,7 @@ public class StatusService extends Service {
 
     public PostStatusResponse postStatus(PostStatusRequest request) {
 
-        if (request.getCurrUserAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No current user listed");
-        if (!getAuthDAO().isValidAuthToken(request.getCurrUserAlias(), request.getAuthToken()))
-            throw new RuntimeException(AUTH_ERROR_TAG + " Unauthenticated request");
+        authenticateRequest(request);
         if (request.getStatus() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No status provided");
 
         return getStoryDAO().postStatus(request.getStatus());
@@ -21,22 +19,18 @@ public class StatusService extends Service {
 
     public FeedResponse getFeed(FeedRequest request) {
 
-        if (request.getCurrUserAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No current user listed");
+        authenticateRequest(request);
         if (request.getFollowerAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No user provided");
         if (request.getLimit() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No provided limit");
-        if (!getAuthDAO().isValidAuthToken(request.getCurrUserAlias(), request.getAuthToken()))
-            throw new RuntimeException(AUTH_ERROR_TAG + " Unauthenticated request");
 
         return getFeedDAO().getFeed(request);
     }
 
     public StoryResponse getStory(StoryRequest request) {
 
-        if (request.getCurrUserAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No current user listed");
+        authenticateRequest(request);
         if (request.getFollowerAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No user provided");
         if (request.getLimit() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No provided limit");
-        if (!getAuthDAO().isValidAuthToken(request.getCurrUserAlias(), request.getAuthToken()))
-            throw new RuntimeException(AUTH_ERROR_TAG + " Unauthenticated request");
 
         return getStoryDAO().getStory(request);
     }
