@@ -15,6 +15,13 @@ import java.util.List;
  */
 public class FollowDAO extends DAO {
 
+    public boolean isFollower(String followerAlias, String followeeAlias) {
+        // TODO: uses the dummy data.  Replace with a real implementation.
+        assert followerAlias != null;
+        assert followeeAlias != null;
+        return followerAlias.length() > followeeAlias.length();
+    }
+
     /**
      * Gets the count of users from the database that the user specified is following. The
      * current implementation uses generated data and doesn't actually access a database.
