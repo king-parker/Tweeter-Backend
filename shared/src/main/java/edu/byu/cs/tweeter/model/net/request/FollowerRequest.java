@@ -2,38 +2,19 @@ package edu.byu.cs.tweeter.model.net.request;
 
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 
-public class FollowerRequest {
+public class FollowerRequest extends AuthorizedRequest {
 
-    private AuthToken authToken;
-    private String currUserAlias;
     private String followeeAlias;
     private Integer limit;
     private String lastFollowerAlias;
 
-    private FollowerRequest() {}
+    private FollowerRequest() {super();}
 
     public FollowerRequest(AuthToken authToken, String currUserAlias, String followeeAlias, Integer limit, String lastFollowerAlias) {
-        this.authToken = authToken;
-        this.currUserAlias = currUserAlias;
+        super(authToken, currUserAlias);
         this.followeeAlias = followeeAlias;
         this.limit = limit;
         this.lastFollowerAlias = lastFollowerAlias;
-    }
-
-    public AuthToken getAuthToken() {
-        return authToken;
-    }
-
-    public void setAuthToken(AuthToken authToken) {
-        this.authToken = authToken;
-    }
-
-    public String getCurrUserAlias() {
-        return currUserAlias;
-    }
-
-    public void setCurrUserAlias(String currUserAlias) {
-        this.currUserAlias = currUserAlias;
     }
 
     public String getFolloweeAlias() {

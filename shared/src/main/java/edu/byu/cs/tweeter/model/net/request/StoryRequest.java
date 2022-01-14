@@ -3,38 +3,18 @@ package edu.byu.cs.tweeter.model.net.request;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.Status;
 
-public class StoryRequest {
-
-    private AuthToken authToken;
-    private String currUserAlias;
+public class StoryRequest extends AuthorizedRequest {
     private String followerAlias;
     private Integer limit;
     private Status lastStoryStatus;
 
-    private StoryRequest() {}
+    private StoryRequest() {super();}
 
     public StoryRequest(AuthToken authToken, String currUserAlias, String followerAlias, Integer limit, Status lastStoryStatus) {
-        this.authToken = authToken;
-        this.currUserAlias = currUserAlias;
+        super(authToken, currUserAlias);
         this.followerAlias = followerAlias;
         this.limit = limit;
         this.lastStoryStatus = lastStoryStatus;
-    }
-
-    public AuthToken getAuthToken() {
-        return authToken;
-    }
-
-    public void setAuthToken(AuthToken authToken) {
-        this.authToken = authToken;
-    }
-
-    public String getCurrUserAlias() {
-        return currUserAlias;
-    }
-
-    public void setCurrUserAlias(String currUserAlias) {
-        this.currUserAlias = currUserAlias;
     }
 
     public String getFollowerAlias() {

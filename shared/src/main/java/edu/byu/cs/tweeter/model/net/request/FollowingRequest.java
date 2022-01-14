@@ -6,10 +6,7 @@ import edu.byu.cs.tweeter.model.domain.AuthToken;
  * Contains all the information needed to make a request to have the server return the next page of
  * followees for a specified follower.
  */
-public class FollowingRequest {
-
-    private AuthToken authToken;
-    private String currUserAlias;
+public class FollowingRequest extends AuthorizedRequest {
     private String followerAlias;
     private Integer limit;
     private String lastFolloweeAlias;
@@ -17,7 +14,7 @@ public class FollowingRequest {
     /**
      * Allows construction of the object from Json. Private so it won't be called in normal code.
      */
-    private FollowingRequest() {}
+    private FollowingRequest() {super();}
 
     /**
      * Creates an instance.
@@ -29,37 +26,10 @@ public class FollowingRequest {
      *                     previous request).
      */
     public FollowingRequest(AuthToken authToken, String currUserAlias, String followerAlias, int limit, String lastFolloweeAlias) {
-        this.authToken = authToken;
-        this.currUserAlias = currUserAlias;
+        super(authToken, currUserAlias);
         this.followerAlias = followerAlias;
         this.limit = limit;
         this.lastFolloweeAlias = lastFolloweeAlias;
-    }
-
-    /**
-     * Returns the auth token of the user who is making the request.
-     *
-     * @return the auth token.
-     */
-    public AuthToken getAuthToken() {
-        return authToken;
-    }
-
-    /**
-     * Sets the auth token.
-     *
-     * @param authToken the auth token.
-     */
-    public void setAuthToken(AuthToken authToken) {
-        this.authToken = authToken;
-    }
-
-    public String getCurrUserAlias() {
-        return currUserAlias;
-    }
-
-    public void setCurrUserAlias(String currUserAlias) {
-        this.currUserAlias = currUserAlias;
     }
 
     /**
