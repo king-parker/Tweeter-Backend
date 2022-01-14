@@ -3,38 +3,19 @@ package edu.byu.cs.tweeter.model.net.request;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.Status;
 
-public class FeedRequest {
+public class FeedRequest extends AuthorizedRequest {
 
-    private AuthToken authToken;
-    private String currUserAlias;
     private String followerAlias;
     private Integer limit;
     private Status lastFeedStatus;
 
-    private FeedRequest() { }
+    private FeedRequest() {super();}
 
     public FeedRequest(AuthToken authToken, String currUserAlias, String followerAlias, int limit, Status lastFeedStatus) {
-        this.authToken = authToken;
-        this.currUserAlias = currUserAlias;
+        super(authToken, currUserAlias);
         this.followerAlias = followerAlias;
         this.limit = limit;
         this.lastFeedStatus = lastFeedStatus;
-    }
-
-    public AuthToken getAuthToken() {
-        return authToken;
-    }
-
-    public void setAuthToken(AuthToken authToken) {
-        this.authToken = authToken;
-    }
-
-    public String getCurrUserAlias() {
-        return currUserAlias;
-    }
-
-    public void setCurrUserAlias(String currUserAlias) {
-        this.currUserAlias = currUserAlias;
     }
 
     public String getFollowerAlias() {
