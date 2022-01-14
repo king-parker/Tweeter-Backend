@@ -9,8 +9,9 @@ import edu.byu.cs.tweeter.model.domain.AuthToken;
 public class FollowingRequest {
 
     private AuthToken authToken;
+    private String currUserAlias;
     private String followerAlias;
-    private int limit;
+    private Integer limit;
     private String lastFolloweeAlias;
 
     /**
@@ -27,8 +28,9 @@ public class FollowingRequest {
      *                     there was no previous request or if no followees were returned in the
      *                     previous request).
      */
-    public FollowingRequest(AuthToken authToken, String followerAlias, int limit, String lastFolloweeAlias) {
+    public FollowingRequest(AuthToken authToken, String currUserAlias, String followerAlias, int limit, String lastFolloweeAlias) {
         this.authToken = authToken;
+        this.currUserAlias = currUserAlias;
         this.followerAlias = followerAlias;
         this.limit = limit;
         this.lastFolloweeAlias = lastFolloweeAlias;
@@ -50,6 +52,14 @@ public class FollowingRequest {
      */
     public void setAuthToken(AuthToken authToken) {
         this.authToken = authToken;
+    }
+
+    public String getCurrUserAlias() {
+        return currUserAlias;
+    }
+
+    public void setCurrUserAlias(String currUserAlias) {
+        this.currUserAlias = currUserAlias;
     }
 
     /**
@@ -75,7 +85,7 @@ public class FollowingRequest {
      *
      * @return the limit.
      */
-    public int getLimit() {
+    public Integer getLimit() {
         return limit;
     }
 
@@ -84,7 +94,7 @@ public class FollowingRequest {
      *
      * @param limit the limit.
      */
-    public void setLimit(int limit) {
+    public void setLimit(Integer limit) {
         this.limit = limit;
     }
 

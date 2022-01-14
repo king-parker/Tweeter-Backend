@@ -19,6 +19,13 @@ public class FollowService extends Service {
      * @return the followees.
      */
     public FollowingResponse getFollowees(FollowingRequest request) {
+
+        if (request.getCurrUserAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No current user listed");
+        if (request.getFollowerAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No user provided");
+        if (request.getLimit() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No provided limit");
+        if (!getAuthDAO().isValidAuthToken(request.getCurrUserAlias(), request.getAuthToken()))
+            throw new RuntimeException(AUTH_ERROR_TAG + " Unauthenticated request");
+
         return getFollowingDAO().getFollowees(request);
     }
 }
