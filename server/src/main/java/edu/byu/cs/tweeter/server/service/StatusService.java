@@ -1,11 +1,23 @@
 package edu.byu.cs.tweeter.server.service;
 
 import edu.byu.cs.tweeter.model.net.request.FeedRequest;
+import edu.byu.cs.tweeter.model.net.request.PostStatusRequest;
 import edu.byu.cs.tweeter.model.net.request.StoryRequest;
 import edu.byu.cs.tweeter.model.net.response.FeedResponse;
+import edu.byu.cs.tweeter.model.net.response.PostStatusResponse;
 import edu.byu.cs.tweeter.model.net.response.StoryResponse;
 
 public class StatusService extends Service {
+
+    public PostStatusResponse postStatus(PostStatusRequest request) {
+
+        if (request.getCurrUserAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No current user listed");
+        if (!getAuthDAO().isValidAuthToken(request.getCurrUserAlias(), request.getAuthToken()))
+            throw new RuntimeException(AUTH_ERROR_TAG + " Unauthenticated request");
+        if (request.getStatus() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No status provided");
+
+        return getStoryDAO().postStatus(request.getStatus());
+    }
 
     public FeedResponse getFeed(FeedRequest request) {
 
