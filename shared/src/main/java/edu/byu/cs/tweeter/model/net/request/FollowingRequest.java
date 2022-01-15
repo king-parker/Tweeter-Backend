@@ -16,6 +16,13 @@ public class FollowingRequest extends AuthorizedRequest {
      */
     private FollowingRequest() {super();}
 
+    public FollowingRequest(AuthToken authToken, String currUserAlias, int limit, String lastFolloweeAlias) {
+        super(authToken, currUserAlias);
+        this.followerAlias = currUserAlias;
+        this.limit = limit;
+        this.lastFolloweeAlias = lastFolloweeAlias;
+    }
+
     /**
      * Creates an instance.
      *

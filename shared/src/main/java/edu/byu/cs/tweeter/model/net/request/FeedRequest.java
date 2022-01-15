@@ -11,6 +11,13 @@ public class FeedRequest extends AuthorizedRequest {
 
     private FeedRequest() {super();}
 
+    public FeedRequest(AuthToken authToken, String currUserAlias, int limit, Status lastFeedStatus) {
+        super(authToken, currUserAlias);
+        this.followerAlias = currUserAlias;
+        this.limit = limit;
+        this.lastFeedStatus = lastFeedStatus;
+    }
+
     public FeedRequest(AuthToken authToken, String currUserAlias, String followerAlias, int limit, Status lastFeedStatus) {
         super(authToken, currUserAlias);
         this.followerAlias = followerAlias;

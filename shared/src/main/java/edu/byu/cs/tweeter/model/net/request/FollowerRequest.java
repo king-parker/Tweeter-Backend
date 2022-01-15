@@ -10,6 +10,13 @@ public class FollowerRequest extends AuthorizedRequest {
 
     private FollowerRequest() {super();}
 
+    public FollowerRequest(AuthToken authToken, String currUserAlias, int limit, String lastFollowerAlias) {
+        super(authToken, currUserAlias);
+        this.followeeAlias = currUserAlias;
+        this.limit = limit;
+        this.lastFollowerAlias = lastFollowerAlias;
+    }
+
     public FollowerRequest(AuthToken authToken, String currUserAlias, String followeeAlias, Integer limit, String lastFollowerAlias) {
         super(authToken, currUserAlias);
         this.followeeAlias = followeeAlias;

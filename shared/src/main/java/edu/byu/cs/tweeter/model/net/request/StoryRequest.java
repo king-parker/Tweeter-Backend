@@ -10,6 +10,13 @@ public class StoryRequest extends AuthorizedRequest {
 
     private StoryRequest() {super();}
 
+    public StoryRequest(AuthToken authToken, String currUserAlias, int limit, Status lastStoryStatus) {
+        super(authToken, currUserAlias);
+        this.followerAlias = currUserAlias;
+        this.limit = limit;
+        this.lastStoryStatus = lastStoryStatus;
+    }
+
     public StoryRequest(AuthToken authToken, String currUserAlias, String followerAlias, Integer limit, Status lastStoryStatus) {
         super(authToken, currUserAlias);
         this.followerAlias = followerAlias;
