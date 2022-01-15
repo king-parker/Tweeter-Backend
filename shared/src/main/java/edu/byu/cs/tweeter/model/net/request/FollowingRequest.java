@@ -6,17 +6,22 @@ import edu.byu.cs.tweeter.model.domain.AuthToken;
  * Contains all the information needed to make a request to have the server return the next page of
  * followees for a specified follower.
  */
-public class FollowingRequest {
-
-    private AuthToken authToken;
+public class FollowingRequest extends AuthorizedRequest {
     private String followerAlias;
-    private int limit;
+    private Integer limit;
     private String lastFolloweeAlias;
 
     /**
      * Allows construction of the object from Json. Private so it won't be called in normal code.
      */
-    private FollowingRequest() {}
+    private FollowingRequest() {super();}
+
+    public FollowingRequest(AuthToken authToken, String currUserAlias, int limit, String lastFolloweeAlias) {
+        super(authToken, currUserAlias);
+        this.followerAlias = currUserAlias;
+        this.limit = limit;
+        this.lastFolloweeAlias = lastFolloweeAlias;
+    }
 
     /**
      * Creates an instance.
@@ -27,29 +32,11 @@ public class FollowingRequest {
      *                     there was no previous request or if no followees were returned in the
      *                     previous request).
      */
-    public FollowingRequest(AuthToken authToken, String followerAlias, int limit, String lastFolloweeAlias) {
-        this.authToken = authToken;
+    public FollowingRequest(AuthToken authToken, String currUserAlias, String followerAlias, int limit, String lastFolloweeAlias) {
+        super(authToken, currUserAlias);
         this.followerAlias = followerAlias;
         this.limit = limit;
         this.lastFolloweeAlias = lastFolloweeAlias;
-    }
-
-    /**
-     * Returns the auth token of the user who is making the request.
-     *
-     * @return the auth token.
-     */
-    public AuthToken getAuthToken() {
-        return authToken;
-    }
-
-    /**
-     * Sets the auth token.
-     *
-     * @param authToken the auth token.
-     */
-    public void setAuthToken(AuthToken authToken) {
-        this.authToken = authToken;
     }
 
     /**
@@ -75,7 +62,7 @@ public class FollowingRequest {
      *
      * @return the limit.
      */
-    public int getLimit() {
+    public Integer getLimit() {
         return limit;
     }
 
@@ -84,7 +71,7 @@ public class FollowingRequest {
      *
      * @param limit the limit.
      */
-    public void setLimit(int limit) {
+    public void setLimit(Integer limit) {
         this.limit = limit;
     }
 

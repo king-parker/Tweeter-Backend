@@ -3,7 +3,7 @@ package edu.byu.cs.tweeter.model.net.request;
 /**
  * Contains all the information needed to make a login request.
  */
-public class LoginRequest {
+public class LoginRequest extends Request {
 
     private String username;
     private String password;
@@ -11,7 +11,7 @@ public class LoginRequest {
     /**
      * Allows construction of the object from Json. Private so it won't be called in normal code.
      */
-    private LoginRequest() {}
+    private LoginRequest() {super();}
 
     /**
      * Creates an instance.

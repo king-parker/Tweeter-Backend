@@ -1,13 +1,13 @@
 package edu.byu.cs.tweeter.server.service;
 
-import edu.byu.cs.tweeter.model.net.request.FollowingRequest;
-import edu.byu.cs.tweeter.model.net.response.FollowingResponse;
+import edu.byu.cs.tweeter.model.net.request.*;
+import edu.byu.cs.tweeter.model.net.response.*;
 import edu.byu.cs.tweeter.server.dao.FollowDAO;
 
 /**
  * Contains the business logic for getting the users a user is following.
  */
-public class FollowService {
+public class FollowService extends Service {
 
     /**
      * Returns the users that the user specified in the request is following. Uses information in
@@ -19,17 +19,74 @@ public class FollowService {
      * @return the followees.
      */
     public FollowingResponse getFollowees(FollowingRequest request) {
+
+        authenticateRequest(request);
+        if (request.getFollowerAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No selected user provided");
+        if (request.getLimit() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No provided limit");
+
         return getFollowingDAO().getFollowees(request);
     }
 
     /**
-     * Returns an instance of {@link FollowDAO}. Allows mocking of the FollowDAO class
-     * for testing purposes. All usages of FollowDAO should get their FollowDAO
-     * instance from this method to allow for mocking of the instance.
+     * Returns the users that the user specified in the request is followed by. Uses information in
+     * the request object to limit the number of followers returned and to return the next set of
+     * followers after any that were returned in a previous request. Uses the {@link FollowDAO} to
+     * get the followers.
      *
-     * @return the instance.
+     * @param request contains the data required to fulfill the request.
+     * @return the followers.
      */
-    FollowDAO getFollowingDAO() {
-        return new FollowDAO();
+    public FollowerResponse getFollowers(FollowerRequest request) {
+
+        authenticateRequest(request);
+        if (request.getFolloweeAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No selected user provided");
+        if (request.getLimit() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No provided limit");
+
+        return getFollowingDAO().getFollowers(request);
     }
+
+    public FollowingCountResponse getFollowingCount(FollowingCountRequest request) {
+
+        authenticateRequest(request);
+        if (request.getFollowerAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No selected user provided");
+
+        int count = getFollowingDAO().getFolloweeCount(request.getCurrUserAlias());
+        return new FollowingCountResponse(count);
+    }
+
+    public FollowersCountResponse getFollowersCount(FollowersCountRequest request) {
+
+        authenticateRequest(request);
+        if (request.getFolloweeAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No selected user provided");
+
+        int count = getFollowingDAO().getFollowerCount(request.getCurrUserAlias());
+        return new FollowersCountResponse(count);
+    }
+
+    public IsFollowingResponse isFollower(IsFollowingRequest request) {
+
+        authenticateRequest(request);
+        if (request.getFollowerAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No following user listed");
+        if (request.getFolloweeAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No followed user listed");
+
+        boolean isFollower = getFollowingDAO().isFollower(request.getFollowerAlias(), request.getFolloweeAlias());
+        return new IsFollowingResponse(isFollower);
+    }
+
+    public FollowResponse follow(FollowRequest request) {
+
+        authenticateRequest(request);
+        if (request.getFollowerAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No following user listed");
+        if (request.getFolloweeAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No followed user listed");
+
+        return getFollowingDAO().follow(request.getFollowerAlias(), request.getFolloweeAlias());
+    }
+
+    public UnfollowResponse unfollow(UnfollowRequest request) {
+
+        authenticateRequest(request);
+        if (request.getFollowerAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No following user listed");
+        if (request.getUnfolloweeAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No unfollowed user listed");
+
+        return getFollowingDAO().unfollow(request.getFollowerAlias(), request.getUnfolloweeAlias());}
 }
