@@ -13,7 +13,7 @@ public class IsFollowingResponse extends Response {
         this.isFollower = isFollower;
     }
 
-    public Boolean getFollower() {
+    public Boolean getIsFollower() {
         return isFollower;
     }
 }
