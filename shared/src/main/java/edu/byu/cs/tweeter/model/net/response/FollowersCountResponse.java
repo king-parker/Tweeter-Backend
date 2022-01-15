@@ -1,9 +1,5 @@
 package edu.byu.cs.tweeter.model.net.response;
 
-import edu.byu.cs.tweeter.model.domain.Status;
-
-import java.util.List;
-
 public class FollowersCountResponse extends Response {
 
     private Integer count;

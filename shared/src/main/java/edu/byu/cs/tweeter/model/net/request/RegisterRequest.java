@@ -1,6 +1,6 @@
 package edu.byu.cs.tweeter.model.net.request;
 
-public class RegisterRequest {
+public class RegisterRequest extends Request {
 
     private String firstName;
     private String lastName;
@@ -8,7 +8,7 @@ public class RegisterRequest {
     private String password;
     private String imageBytesBase64;
 
-    private RegisterRequest() {}
+    private RegisterRequest() {super();}
 
     public RegisterRequest(String firstName, String lastName, String username, String password, String imageBytesBase64) {
         this.firstName = firstName;
