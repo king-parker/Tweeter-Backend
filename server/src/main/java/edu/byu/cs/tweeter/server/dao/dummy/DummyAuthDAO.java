@@ -18,7 +18,7 @@ public class DummyAuthDAO extends DummyDAO implements AuthDAO {
     }
 
     @Override
-    public void endUserSession(AuthToken authToken) {
+    public void endUserSession(String alias, AuthToken authToken) {
         // TODO: Change to actual logic
     }
 }

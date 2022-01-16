@@ -1,9 +1,6 @@
 package edu.byu.cs.tweeter.server.dao.dummy;
 
 import edu.byu.cs.tweeter.model.domain.Status;
-import edu.byu.cs.tweeter.model.domain.User;
-import edu.byu.cs.tweeter.model.net.request.FeedRequest;
-import edu.byu.cs.tweeter.model.net.response.FeedResponse;
 import edu.byu.cs.tweeter.server.dao.FeedDAO;
 import edu.byu.cs.tweeter.server.util.Pair;
 
@@ -13,9 +10,9 @@ import java.util.List;
 public class DummyFeedDAO extends DummyDAO implements FeedDAO {
 
     @Override
-    public Integer getFeedCount(User currUser) {
+    public Integer getFeedCount(String userAlias) {
         // TODO: uses the dummy data.  Replace with a real implementation.
-        assert currUser != null;
+        assert userAlias != null;
         return getDummyFeed().size();
     }
 

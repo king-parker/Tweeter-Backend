@@ -10,7 +10,6 @@ import edu.byu.cs.tweeter.model.net.response.GetUserResponse;
 import edu.byu.cs.tweeter.model.net.response.LoginResponse;
 import edu.byu.cs.tweeter.model.net.response.LogoutResponse;
 import edu.byu.cs.tweeter.model.net.response.RegisterResponse;
-import edu.byu.cs.tweeter.server.util.FakeData;
 
 public class UserService extends Service {
 
@@ -61,7 +60,7 @@ public class UserService extends Service {
 
         authenticateRequest(request);
 
-        getAuthDAO().endUserSession(request.getAuthToken());
+        getAuthDAO().endUserSession(request.getCurrUserAlias(), request.getAuthToken());
         return new LogoutResponse();
     }
 }

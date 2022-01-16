@@ -5,5 +5,5 @@ import edu.byu.cs.tweeter.model.domain.AuthToken;
 public interface AuthDAO {
     boolean isValidAuthToken(String alias, AuthToken authToken);
     AuthToken generateLoginToken(String alias);
-    void endUserSession(AuthToken authToken);
+    void endUserSession(String alias, AuthToken authToken);
 }

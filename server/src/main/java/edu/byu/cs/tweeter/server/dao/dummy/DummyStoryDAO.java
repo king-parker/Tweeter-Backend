@@ -1,10 +1,6 @@
 package edu.byu.cs.tweeter.server.dao.dummy;
 
 import edu.byu.cs.tweeter.model.domain.Status;
-import edu.byu.cs.tweeter.model.domain.User;
-import edu.byu.cs.tweeter.model.net.request.StoryRequest;
-import edu.byu.cs.tweeter.model.net.response.PostStatusResponse;
-import edu.byu.cs.tweeter.model.net.response.StoryResponse;
 import edu.byu.cs.tweeter.server.dao.StoryDAO;
 import edu.byu.cs.tweeter.server.util.Pair;
 
@@ -19,9 +15,9 @@ public class DummyStoryDAO extends DummyDAO implements StoryDAO {
     }
 
     @Override
-    public int getStoryCount(User currUser) {
+    public int getStoryCount(String userAlias) {
         // TODO: uses the dummy data.  Replace with a real implementation.
-        assert currUser != null;
+        assert userAlias != null;
         return getDummyStory().size();
     }
 
