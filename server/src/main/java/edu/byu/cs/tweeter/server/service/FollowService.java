@@ -1,48 +1,41 @@
 package edu.byu.cs.tweeter.server.service;
 
+import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.request.*;
 import edu.byu.cs.tweeter.model.net.response.*;
-import edu.byu.cs.tweeter.server.dao.FollowDAO;
+import edu.byu.cs.tweeter.server.util.Pair;
+
+import java.util.List;
 
 /**
  * Contains the business logic for getting the users a user is following.
  */
 public class FollowService extends Service {
 
-    /**
-     * Returns the users that the user specified in the request is following. Uses information in
-     * the request object to limit the number of followees returned and to return the next set of
-     * followees after any that were returned in a previous request. Uses the {@link FollowDAO} to
-     * get the followees.
-     *
-     * @param request contains the data required to fulfill the request.
-     * @return the followees.
-     */
     public FollowingResponse getFollowees(FollowingRequest request) {
 
         authenticateRequest(request);
         if (request.getFollowerAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No selected user provided");
         if (request.getLimit() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No provided limit");
 
-        return getFollowingDAO().getFollowees(request);
+        Pair<List<User>, Boolean> pair = getFollowingDAO().getFollowees(request.getFollowerAlias(), request.getLimit(),
+                request.getLastFolloweeAlias());
+        List<User> followees = pair.getFirst();
+        Boolean hasMorePages = pair.getSecond();
+        return new FollowingResponse(followees, hasMorePages);
     }
 
-    /**
-     * Returns the users that the user specified in the request is followed by. Uses information in
-     * the request object to limit the number of followers returned and to return the next set of
-     * followers after any that were returned in a previous request. Uses the {@link FollowDAO} to
-     * get the followers.
-     *
-     * @param request contains the data required to fulfill the request.
-     * @return the followers.
-     */
     public FollowerResponse getFollowers(FollowerRequest request) {
 
         authenticateRequest(request);
         if (request.getFolloweeAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No selected user provided");
         if (request.getLimit() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No provided limit");
 
-        return getFollowingDAO().getFollowers(request);
+        Pair<List<User>, Boolean> pair = getFollowingDAO().getFollowers(request.getFolloweeAlias(), request.getLimit(),
+                request.getLastFollowerAlias());
+        List<User> followers = pair.getFirst();
+        Boolean hasMorePages = pair.getSecond();
+        return new FollowerResponse(followers, hasMorePages);
     }
 
     public FollowingCountResponse getFollowingCount(FollowingCountRequest request) {
@@ -79,7 +72,8 @@ public class FollowService extends Service {
         if (request.getFollowerAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No following user listed");
         if (request.getFolloweeAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No followed user listed");
 
-        return getFollowingDAO().follow(request.getFollowerAlias(), request.getFolloweeAlias());
+        getFollowingDAO().follow(request.getFollowerAlias(), request.getFolloweeAlias());
+        return new FollowResponse();
     }
 
     public UnfollowResponse unfollow(UnfollowRequest request) {
@@ -88,5 +82,7 @@ public class FollowService extends Service {
         if (request.getFollowerAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No following user listed");
         if (request.getUnfolloweeAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No unfollowed user listed");
 
-        return getFollowingDAO().unfollow(request.getFollowerAlias(), request.getUnfolloweeAlias());}
+        getFollowingDAO().unfollow(request.getFollowerAlias(), request.getUnfolloweeAlias());
+        return new UnfollowResponse();
+    }
 }

@@ -1,4 +1,4 @@
-package edu.byu.cs.tweeter.server.dao;
+package edu.byu.cs.tweeter.server.dao.dummy;
 
 import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.Status;
@@ -7,7 +7,7 @@ import edu.byu.cs.tweeter.server.util.FakeData;
 
 import java.util.List;
 
-public class DAO {
+public class DummyDAO {
 
     /**
      * Returns the dummy user to be returned by the login operation.
