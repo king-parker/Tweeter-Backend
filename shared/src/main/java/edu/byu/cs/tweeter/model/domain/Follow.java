@@ -11,26 +11,26 @@ public class Follow implements Serializable {
     /**
      * The user doing the following.
      */
-    public User follower;
+    public String followerAlias;
     /**
      * The user being followed.
      */
-    public User followee;
+    public String followeeAlias;
 
     public Follow() {
     }
 
-    public Follow(User follower, User followee) {
-        this.follower = follower;
-        this.followee = followee;
+    public Follow(String followerAlias, String followeeAlias) {
+        this.followerAlias = followerAlias;
+        this.followeeAlias = followeeAlias;
     }
 
-    public User getFollower() {
-        return follower;
+    public String getFollowerAlias() {
+        return followerAlias;
     }
 
-    public User getFollowee() {
-        return followee;
+    public String getFolloweeAlias() {
+        return followeeAlias;
     }
 
     @Override
@@ -38,20 +38,20 @@ public class Follow implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Follow that = (Follow) o;
-        return follower.equals(that.follower) &&
-                followee.equals(that.followee);
+        return followerAlias.equals(that.followerAlias) &&
+                followeeAlias.equals(that.followeeAlias);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(follower, followee);
+        return Objects.hash(followerAlias, followeeAlias);
     }
 
     @Override
     public String toString() {
         return "Follow{" +
-                "follower=" + follower.getAlias() +
-                ", followee=" + followee.getAlias() +
+                "follower=" + followerAlias +
+                ", followee=" + followeeAlias +
                 '}';
     }
 }
