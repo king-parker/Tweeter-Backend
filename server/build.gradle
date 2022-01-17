@@ -16,4 +16,6 @@ dependencies {
     compile 'com.amazonaws:aws-lambda-java-core:1.2.0'
     testCompile 'org.junit.jupiter:junit-jupiter-api:5.5.2'
     testCompile 'org.mockito:mockito-all:1.10.19'
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.138'
+    implementation 'com.amazonaws:aws-java-sdk-dynamodb:1.12.138'
 }
