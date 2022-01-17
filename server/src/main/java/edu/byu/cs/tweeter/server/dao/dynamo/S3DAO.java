@@ -7,16 +7,20 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import edu.byu.cs.tweeter.model.net.DataAccessException;
+import edu.byu.cs.tweeter.model.net.TweeterRemoteException;
+import edu.byu.cs.tweeter.server.service.Service;
 
 import java.io.ByteArrayInputStream;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Base64;
 
 public class S3DAO {
 
     private static final String BUCKET_NAME = "pk-tweeter-profile-images";
 
-    public String upload(String alias, String encodedBase64Image) {
+    public String upload(String alias, String encodedBase64Image) throws DataAccessException {
 
         URL url;
         String filename = alias;
@@ -43,8 +47,9 @@ public class S3DAO {
 
             url = s3.getUrl(BUCKET_NAME, filename);
         } catch (SdkClientException e) {
-            // TODO: Throw a DataAccessException
-            throw e;
+            System.out.println(e.getMessage());
+            System.out.println(Arrays.toString(e.getStackTrace()));
+            throw new DataAccessException(Service.SERVER_ERROR_TAG + " Error uploading picture", e.getCause());
         }
 
         return url.toString();

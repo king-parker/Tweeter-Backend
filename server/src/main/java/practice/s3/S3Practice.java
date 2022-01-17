@@ -1,5 +1,6 @@
 package practice.s3;
 
+import edu.byu.cs.tweeter.model.net.DataAccessException;
 import edu.byu.cs.tweeter.server.dao.dynamo.S3DAO;
 
 import java.io.File;
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class S3Practice {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, DataAccessException {
 
         List<String> images = Arrays.asList(
                 "ashitaka", "eboshi", "gonza", "hii", "jigo", "kohroku", "moro", "nago", "okkoto", "san", "toki"
