@@ -3,6 +3,8 @@ package edu.byu.cs.tweeter.server.service;
 import edu.byu.cs.tweeter.model.net.request.AuthorizedRequest;
 import edu.byu.cs.tweeter.server.dao.*;
 import edu.byu.cs.tweeter.server.dao.dummy.DummyDAOFactory;
+import edu.byu.cs.tweeter.server.dao.dynamo.DynamoDAOFactory;
+import edu.byu.cs.tweeter.server.lambda.config.HandlerConfig;
 
 public class Service {
 
@@ -11,9 +13,11 @@ public class Service {
     public static final String NOT_FOUND_TAG = "[NotFound]";
     public static final String SERVER_ERROR_TAG = "[InternalServerError]";
 
+    /**
+     * By default, service classes use the DAOFactory provided in the HandlerConfig
+     */
     public Service() {
-        // TODO: Switch to DynamoDB
-        this(new DummyDAOFactory());
+        this(HandlerConfig.getInstance().getFactory());
     }
 
     public Service(DAOFactory daoFactory) {

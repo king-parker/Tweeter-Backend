@@ -10,8 +10,16 @@ import edu.byu.cs.tweeter.model.net.response.GetUserResponse;
 import edu.byu.cs.tweeter.model.net.response.LoginResponse;
 import edu.byu.cs.tweeter.model.net.response.LogoutResponse;
 import edu.byu.cs.tweeter.model.net.response.RegisterResponse;
+import edu.byu.cs.tweeter.server.dao.DAOFactory;
 
 public class UserService extends Service {
+    public UserService() {
+        super();
+    }
+
+    public UserService(DAOFactory daoFactory) {
+        super(daoFactory);
+    }
 
     public LoginResponse login(LoginRequest request) {
 

@@ -7,11 +7,19 @@ import edu.byu.cs.tweeter.model.net.request.StoryRequest;
 import edu.byu.cs.tweeter.model.net.response.FeedResponse;
 import edu.byu.cs.tweeter.model.net.response.PostStatusResponse;
 import edu.byu.cs.tweeter.model.net.response.StoryResponse;
+import edu.byu.cs.tweeter.server.dao.DAOFactory;
 import edu.byu.cs.tweeter.server.util.Pair;
 
 import java.util.List;
 
 public class StatusService extends Service {
+    public StatusService() {
+        super();
+    }
+
+    public StatusService(DAOFactory daoFactory) {
+        super(daoFactory);
+    }
 
     public PostStatusResponse postStatus(PostStatusRequest request) {
 

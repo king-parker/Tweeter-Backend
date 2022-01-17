@@ -3,6 +3,7 @@ package edu.byu.cs.tweeter.server.service;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.request.*;
 import edu.byu.cs.tweeter.model.net.response.*;
+import edu.byu.cs.tweeter.server.dao.DAOFactory;
 import edu.byu.cs.tweeter.server.util.Pair;
 
 import java.util.List;
@@ -11,6 +12,13 @@ import java.util.List;
  * Contains the business logic for getting the users a user is following.
  */
 public class FollowService extends Service {
+    public FollowService() {
+        super();
+    }
+
+    public FollowService(DAOFactory daoFactory) {
+        super(daoFactory);
+    }
 
     public FollowingResponse getFollowees(FollowingRequest request) {
 
