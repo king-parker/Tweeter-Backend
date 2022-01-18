@@ -8,13 +8,21 @@ import edu.byu.cs.tweeter.server.dao.*;
 public class DynamoDAOFactory extends DAOFactory {
 
     public static final String REGION = "us-west-2";
+    private static AmazonDynamoDB client;
     private static DynamoDB db;
+
+    public static AmazonDynamoDB getDbClient() {
+        if (client == null) {
+            client = AmazonDynamoDBClientBuilder.standard()
+                    .withRegion(REGION).build();
+        }
+
+        return client;
+    }
 
     public static DynamoDB getDatabase() {
         if (db == null) {
-            AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
-                    .withRegion(REGION).build();
-            db = new DynamoDB(client);
+            db = new DynamoDB(getDbClient());
         }
 
         return db;

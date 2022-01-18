@@ -104,7 +104,7 @@ public class DynamoUserDAO implements UserDAO {
         return new User(firstName, lastName, username, imageUrl);
     }
 
-    public int getFollowCount(String alias) {
+    public int getFollowerCount(String alias) {
         GetItemSpec spec = new GetItemSpec().withPrimaryKey(PARTITION_KEY, alias);
 
         Item outcome = table.getItem(spec);
