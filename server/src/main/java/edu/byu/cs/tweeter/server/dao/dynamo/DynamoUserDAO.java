@@ -18,22 +18,16 @@ import java.util.Arrays;
 
 public class DynamoUserDAO implements UserDAO {
     private final String TABLE_NAME = "tweeter-user";
-    private final String REGION = "us-west-2";
     private final String PARTITION_KEY = "user_alias";
     private final String ATT_FN_NAME = "first_name";
     private final String ATT_LN_NAME = "last_name";
     private final String ATT_PASS_NAME = "password";
     private final String ATT_IMURL_NAME = "image_url";
 
-    private AmazonDynamoDB client;
-    private DynamoDB db;
-    private Table table;
+    private final Table table;
 
     public DynamoUserDAO() {
-        client = AmazonDynamoDBClientBuilder.standard()
-                .withRegion(REGION).build();
-        db = new DynamoDB(client);
-        table = db.getTable(TABLE_NAME);
+        table = DynamoDAOFactory.getDatabase().getTable(TABLE_NAME);
     }
 
     @Override
