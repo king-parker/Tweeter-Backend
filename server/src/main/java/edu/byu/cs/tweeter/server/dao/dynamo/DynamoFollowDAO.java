@@ -7,8 +7,6 @@ import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.spec.DeleteItemSpec;
 import com.amazonaws.services.dynamodbv2.document.spec.GetItemSpec;
 import com.amazonaws.services.dynamodbv2.document.spec.PutItemSpec;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.DataAccessException;
@@ -16,7 +14,8 @@ import edu.byu.cs.tweeter.server.dao.FollowDAO;
 import edu.byu.cs.tweeter.server.service.Service;
 import edu.byu.cs.tweeter.server.util.Pair;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class DynamoFollowDAO implements FollowDAO {
     private final String TABLE_NAME = "tweeter-follows";
@@ -107,48 +106,17 @@ public class DynamoFollowDAO implements FollowDAO {
 
     @Override
     public Pair<List<User>, Boolean> getFollowees(String followerAlias, int limit, String lastFolloweeAlias) {
-        Pair<List<User>, Boolean> result = new Pair<>(null, null);
 
-        String fllr = "#fllr";
-        Map<String, String> attrNames = new HashMap<>();
-        attrNames.put(fllr, PARTITION_KEY);
+        QueryResult queryResult = PaginatedRequestStrategy.makeQuery(TABLE_NAME, PARTITION_KEY, followerAlias,
+                SORT_KEY, lastFolloweeAlias, limit, null);
 
-        String fllrValue = ":follower";
-        Map<String, AttributeValue> attrValues = new HashMap<>();
-        attrValues.put(fllrValue, new AttributeValue().withS(followerAlias));
-
-        QueryRequest queryRequest = new QueryRequest()
-                .withTableName(TABLE_NAME)
-                .withKeyConditionExpression(fllr + " = " + fllrValue)
-                .withExpressionAttributeNames(attrNames)
-                .withExpressionAttributeValues(attrValues)
-                .withLimit(limit);
-
-        if (isNonEmptyString(lastFolloweeAlias)) {
-            Map<String, AttributeValue> startKey = new HashMap<>();
-            startKey.put(PARTITION_KEY, new AttributeValue().withS(followerAlias));
-            startKey.put(SORT_KEY, new AttributeValue().withS(lastFolloweeAlias));
-
-            queryRequest = queryRequest.withExclusiveStartKey(startKey);
-        }
-
-        QueryResult queryResult = DynamoDAOFactory.getDbClient().query(queryRequest);
-        List<Map<String, AttributeValue>> items = queryResult.getItems();
-        if (items != null) {
-            result.setFirst(new ArrayList<>());
-            for (Map<String, AttributeValue> item : items){
-                String firstname = item.get(ATT_FWE_FN_KEY).getS();
-                String lastname = item.get(ATT_FWE_LN_KEY).getS();
-                String alias = item.get(SORT_KEY).getS();
-                String image = item.get(ATT_FWE_IMURL_NAME).getS();
-                result.getFirst().add(new User(firstname, lastname, alias, image));
-            }
-        }
-
-        Map<String, AttributeValue> lastKey = queryResult.getLastEvaluatedKey();
-        result.setSecond(lastKey != null);
-
-        return result;
+        return PaginatedRequestStrategy.parseQueryResult(queryResult, (UserMapper) item -> {
+            String firstname = item.get(ATT_FWE_FN_KEY).getS();
+            String lastname = item.get(ATT_FWE_LN_KEY).getS();
+            String alias = item.get(SORT_KEY).getS();
+            String image = item.get(ATT_FWE_IMURL_NAME).getS();
+            return new User(firstname, lastname, alias, image);
+        });
     }
 
     @Override
@@ -158,49 +126,16 @@ public class DynamoFollowDAO implements FollowDAO {
 
     @Override
     public Pair<List<User>, Boolean> getFollowers(String followeeAlias, int limit, String lastFollowerAlias) {
-        Pair<List<User>, Boolean> result = new Pair<>(null, null);
+        QueryResult queryResult = PaginatedRequestStrategy.makeQuery(TABLE_NAME, INDEX_PARTITION_KEY, followeeAlias,
+                INDEX_SORT_KEY, lastFollowerAlias, limit, INDEX_NAME);
 
-        String flle = "#flle";
-        Map<String, String> attrNames = new HashMap<>();
-        attrNames.put(flle, INDEX_PARTITION_KEY);
-
-        String flleValue = ":followee";
-        Map<String, AttributeValue> attrValues = new HashMap<>();
-        attrValues.put(flleValue, new AttributeValue().withS(followeeAlias));
-
-        QueryRequest queryRequest = new QueryRequest()
-                .withTableName(TABLE_NAME)
-                .withIndexName(INDEX_NAME)
-                .withKeyConditionExpression(flle + " = " + flleValue)
-                .withExpressionAttributeNames(attrNames)
-                .withExpressionAttributeValues(attrValues)
-                .withLimit(limit);
-
-        if (isNonEmptyString(lastFollowerAlias)) {
-            Map<String, AttributeValue> startKey = new HashMap<>();
-            startKey.put(INDEX_PARTITION_KEY, new AttributeValue().withS(followeeAlias));
-            startKey.put(INDEX_SORT_KEY, new AttributeValue().withS(lastFollowerAlias));
-
-            queryRequest = queryRequest.withExclusiveStartKey(startKey);
-        }
-
-        QueryResult queryResult = DynamoDAOFactory.getDbClient().query(queryRequest);
-        List<Map<String, AttributeValue>> items = queryResult.getItems();
-        if (items != null) {
-            result.setFirst(new ArrayList<>());
-            for (Map<String, AttributeValue> item : items){
-                String firstname = item.get(ATT_FWR_FN_KEY).getS();
-                String lastname = item.get(ATT_FWR_LN_KEY).getS();
-                String alias = item.get(INDEX_SORT_KEY).getS();
-                String image = item.get(ATT_FWR_IMURL_NAME).getS();
-                result.getFirst().add(new User(firstname, lastname, alias, image));
-            }
-        }
-
-        Map<String, AttributeValue> lastKey = queryResult.getLastEvaluatedKey();
-        result.setSecond(lastKey != null);
-
-        return result;
+        return PaginatedRequestStrategy.parseQueryResult(queryResult, (UserMapper) item -> {
+            String firstname = item.get(ATT_FWR_FN_KEY).getS();
+            String lastname = item.get(ATT_FWR_LN_KEY).getS();
+            String alias = item.get(INDEX_SORT_KEY).getS();
+            String image = item.get(ATT_FWR_IMURL_NAME).getS();
+            return new User(firstname, lastname, alias, image);
+        });
     }
 
     private Pair<User, User> checkForUsers(String followerAlias, String followeeAlias) {
@@ -229,4 +164,6 @@ public class DynamoFollowDAO implements FollowDAO {
     private static boolean isNonEmptyString(String value) {
         return (value != null && value.length() > 0);
     }
+
+    private interface UserMapper extends PaginatedRequestStrategy.ItemMapper<User> {}
 }
