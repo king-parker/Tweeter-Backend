@@ -8,4 +8,5 @@ import java.util.List;
 public interface FeedDAO {
     Integer getFeedCount(String userAlias);
     Pair<List<Status>, Boolean> getFeed(String followerAlias, int limit, Status lastFeedStatus);
+    void addStatus(String alias, Status followeeStatus);
 }

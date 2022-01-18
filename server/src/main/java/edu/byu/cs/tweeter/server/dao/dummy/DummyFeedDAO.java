@@ -43,6 +43,11 @@ public class DummyFeedDAO extends DummyDAO implements FeedDAO {
         return new Pair<>(responseFeed, hasMorePages);
     }
 
+    @Override
+    public void addStatus(String alias, Status followeeStatus) {
+        // Do nothing
+    }
+
     private int getFeedStatusStartingIndex(Status lastFeedStatus, List<Status> feed) {
 
         int feedStatusIndex = 0;
