@@ -36,8 +36,13 @@ public class UserPutPractice {
             String encodedBase64Image = Base64.getEncoder().encodeToString(imageData);
 
             User registeredUser = new DynamoUserDAO().registerNewUser(addUser.getFirstName(), addUser.getLastName(), addUser.getAlias(), "password", encodedBase64Image);
-
-            assert registeredUser == addUser;
+            if (registeredUser == null) {
+                System.err.printf("Could not add user %s to the database%n", addUser.getAlias());
+            }
+            else {
+                assert registeredUser == addUser;
+                System.out.printf("Added user %s to the database%n", addUser.getAlias());
+            }
         }
     }
 }

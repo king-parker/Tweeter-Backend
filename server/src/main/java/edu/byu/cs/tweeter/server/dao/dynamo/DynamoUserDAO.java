@@ -78,6 +78,13 @@ public class DynamoUserDAO implements UserDAO {
     @Override
     public User registerNewUser(String firstName, String lastName, String username, String password, String imageBytesBase64) {
 
+        try {
+            getUser(username);
+            return null;
+        } catch (DataAccessException e) {
+            // Username available to be used, do nothing
+        }
+
         String imageUrl = new S3DAO().upload(username, imageBytesBase64);
 
         Item item = new Item().withPrimaryKey(PARTITION_KEY, username)
