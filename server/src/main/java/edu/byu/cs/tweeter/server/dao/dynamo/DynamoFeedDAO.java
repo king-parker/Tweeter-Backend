@@ -6,14 +6,12 @@ import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.spec.PutItemSpec;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
 import edu.byu.cs.tweeter.model.domain.Status;
-import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.net.DataAccessException;
 import edu.byu.cs.tweeter.server.dao.FeedDAO;
 import edu.byu.cs.tweeter.server.dao.dummy.DummyFeedDAO;
 import edu.byu.cs.tweeter.server.service.Service;
 import edu.byu.cs.tweeter.server.util.Pair;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -49,29 +47,11 @@ public class DynamoFeedDAO implements FeedDAO {
         QueryResult queryResult = PaginatedRequestStrategy.makeQuery(TABLE_NAME, PARTITION_KEY, followeeStatusAlias,
                 SORT_KEY, lastTimestamp, limit, null);
 
-        return PaginatedRequestStrategy.parseQueryResult(queryResult, (DynamoFeedDAO.StatusMapper) item -> {
-            String post = item.get(ATT_POST_KEY).getS();
-            String firstname = item.get(ATT_FN_KEY).getS();
-            String lastname = item.get(ATT_LN_KEY).getS();
-            String alias = item.get(ATT_PAL_KEY).getS();
-            String image = item.get(ATT_IMURL_NAME).getS();
-            String timestamp = item.get(SORT_KEY).getS();
-
-            List<String> urls = new ArrayList<>();
-            List<String> mentions = new ArrayList<>();
-            if (item.containsKey(ATT_URLS_KEY))
-                urls = item.get(ATT_URLS_KEY).getSS();
-            if (item.containsKey(ATT_MEN_KEY))
-                mentions = item.get(ATT_MEN_KEY).getSS();
-
-            User user = new User(firstname, lastname, alias, image);
-            return new Status(post, user, timestamp, urls, mentions);
-        });
+        return PaginatedRequestStrategy.StatusExtractor.extractResults(queryResult, ATT_POST_KEY, ATT_FN_KEY, ATT_LN_KEY, ATT_PAL_KEY, ATT_IMURL_NAME, SORT_KEY, ATT_URLS_KEY, ATT_MEN_KEY);
     }
 
     @Override
     public void addStatus(String alias, Status followeeStatus) {
-
         Item item = new Item().withPrimaryKey(PARTITION_KEY, alias, SORT_KEY, followeeStatus.datetime)
                 .withString(ATT_POST_KEY, followeeStatus.getPost())
                 .withString(ATT_FN_KEY, followeeStatus.getUser().getFirstName())
@@ -90,6 +70,4 @@ public class DynamoFeedDAO implements FeedDAO {
             throw new DataAccessException(String.format("%s Error adding status to %s's feed", Service.SERVER_ERROR_TAG, alias) , e.getCause());
         }
     }
-
-    private interface StatusMapper extends PaginatedRequestStrategy.ItemMapper<Status> {}
 }

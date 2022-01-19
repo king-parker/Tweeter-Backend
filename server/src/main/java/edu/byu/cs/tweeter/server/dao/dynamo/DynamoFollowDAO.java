@@ -110,7 +110,7 @@ public class DynamoFollowDAO implements FollowDAO {
         QueryResult queryResult = PaginatedRequestStrategy.makeQuery(TABLE_NAME, PARTITION_KEY, followerAlias,
                 SORT_KEY, lastFolloweeAlias, limit, null);
 
-        return extractUserResults(queryResult, ATT_FWE_FN_KEY, ATT_FWE_LN_KEY, SORT_KEY, ATT_FWE_IMURL_NAME);
+        return PaginatedRequestStrategy.UserExtractor.extractResults(queryResult, ATT_FWE_FN_KEY, ATT_FWE_LN_KEY, SORT_KEY, ATT_FWE_IMURL_NAME);
     }
 
     @Override
@@ -123,7 +123,7 @@ public class DynamoFollowDAO implements FollowDAO {
         QueryResult queryResult = PaginatedRequestStrategy.makeQuery(TABLE_NAME, INDEX_PARTITION_KEY, followeeAlias,
                 INDEX_SORT_KEY, lastFollowerAlias, limit, INDEX_NAME);
 
-        return extractUserResults(queryResult, ATT_FWR_FN_KEY, ATT_FWR_LN_KEY, INDEX_SORT_KEY, ATT_FWR_IMURL_NAME);
+        return PaginatedRequestStrategy.UserExtractor.extractResults(queryResult, ATT_FWR_FN_KEY, ATT_FWR_LN_KEY, INDEX_SORT_KEY, ATT_FWR_IMURL_NAME);
     }
 
     private Pair<User, User> checkForUsers(String followerAlias, String followeeAlias) {
@@ -147,15 +147,5 @@ public class DynamoFollowDAO implements FollowDAO {
         }
 
         return users;
-    }
-
-    private Pair<List<User>, Boolean> extractUserResults(QueryResult queryResult, String firstnameKey, String lastnameKey, String aliasKey, String imageKey) {
-        return PaginatedRequestStrategy.parseQueryResult(queryResult, item -> {
-            String firstname = item.get(firstnameKey).getS();
-            String lastname = item.get(lastnameKey).getS();
-            String alias = item.get(aliasKey).getS();
-            String image = item.get(imageKey).getS();
-            return new User(firstname, lastname, alias, image);
-        });
     }
 }

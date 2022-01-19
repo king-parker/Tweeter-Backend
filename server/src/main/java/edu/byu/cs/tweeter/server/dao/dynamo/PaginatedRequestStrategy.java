@@ -3,6 +3,8 @@ package edu.byu.cs.tweeter.server.dao.dynamo;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
+import edu.byu.cs.tweeter.model.domain.Status;
+import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.server.util.Pair;
 
 import java.util.ArrayList;
@@ -64,5 +66,40 @@ public class PaginatedRequestStrategy {
 
     public interface ItemMapper <T> {
         T mapItem(Map<String, AttributeValue> item);
+    }
+
+    public static class StatusExtractor {
+        static Pair<List<Status>, Boolean> extractResults(QueryResult queryResult, String postKey, String firstnameKey, String lastnameKey, String posterAliasKey, String imageUrlKey, String timestampKey, String urlsKey, String mentionsKey) {
+            return PaginatedRequestStrategy.parseQueryResult(queryResult, item -> {
+                String post = item.get(postKey).getS();
+                String firstname = item.get(firstnameKey).getS();
+                String lastname = item.get(lastnameKey).getS();
+                String alias = item.get(posterAliasKey).getS();
+                String image = item.get(imageUrlKey).getS();
+                String timestamp = item.get(timestampKey).getS();
+
+                List<String> urls = new ArrayList<>();
+                List<String> mentions = new ArrayList<>();
+                if (item.containsKey(urlsKey))
+                    urls = item.get(urlsKey).getSS();
+                if (item.containsKey(mentionsKey))
+                    mentions = item.get(mentionsKey).getSS();
+
+                User user = new User(firstname, lastname, alias, image);
+                return new Status(post, user, timestamp, urls, mentions);
+            });
+        }
+    }
+
+    public static class UserExtractor {
+        static public Pair<List<User>, Boolean> extractResults(QueryResult queryResult, String firstnameKey, String lastnameKey, String aliasKey, String imageKey) {
+            return PaginatedRequestStrategy.parseQueryResult(queryResult, item -> {
+                String firstname = item.get(firstnameKey).getS();
+                String lastname = item.get(lastnameKey).getS();
+                String alias = item.get(aliasKey).getS();
+                String image = item.get(imageKey).getS();
+                return new User(firstname, lastname, alias, image);
+            });
+        }
     }
 }
