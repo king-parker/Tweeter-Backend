@@ -1,12 +1,20 @@
 package edu.byu.cs.tweeter.server.dao.dynamo;
 
+import com.amazonaws.services.dynamodbv2.document.Item;
+import com.amazonaws.services.dynamodbv2.document.PutItemOutcome;
 import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.dynamodbv2.document.spec.PutItemSpec;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
 import edu.byu.cs.tweeter.model.domain.Status;
+import edu.byu.cs.tweeter.model.domain.User;
+import edu.byu.cs.tweeter.model.net.DataAccessException;
 import edu.byu.cs.tweeter.server.dao.StoryDAO;
 import edu.byu.cs.tweeter.server.dao.dummy.DummyStoryDAO;
+import edu.byu.cs.tweeter.server.service.Service;
 import edu.byu.cs.tweeter.server.util.Pair;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 public class DynamoStoryDAO implements StoryDAO {
@@ -28,6 +36,48 @@ public class DynamoStoryDAO implements StoryDAO {
 
     @Override
     public void postStatus(Status status) {
+        // Put status in Story table
+        Item item = new Item().withPrimaryKey(PARTITION_KEY, status.getUserAlias(), SORT_KEY, status.datetime)
+                .withString(ATT_POST_KEY, status.getPost())
+                .withString(ATT_FN_KEY, status.getUser().getFirstName())
+                .withString(ATT_LN_KEY, status.getUser().getLastName())
+                .withString(ATT_IMURL_NAME, status.getUser().getImageUrl())
+                .withStringSet(ATT_URLS_KEY, new HashSet<>(status.getUrls()))
+                .withStringSet(ATT_MEN_KEY, new HashSet<>(status.getMentions()));
+        PutItemSpec spec = new PutItemSpec().withItem(item);
+
+        try {
+            PutItemOutcome outcome = table.putItem(spec);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println(Arrays.toString(e.getStackTrace()));
+            throw new DataAccessException(String.format("%s Error adding status to %s's story", Service.SERVER_ERROR_TAG, status.getUserAlias()) , e.getCause());
+        }
+
+        DynamoFollowDAO followDAO = new DynamoFollowDAO();
+        DynamoFeedDAO feedDAO = new DynamoFeedDAO();
+        Pair<List<User>, Boolean> follows = new Pair<>(null, null);
+        String lastFollowerAlias = null;
+        boolean hasMorePages = true;
+
+        while (hasMorePages) {
+            follows = populateFeedTable(status, status.getUserAlias(), lastFollowerAlias, followDAO, feedDAO);
+
+            List<User> users = follows.getFirst();
+            User lastUser = users.get(users.size() - 1);
+            lastFollowerAlias = lastUser.getAlias();
+
+            hasMorePages = follows.getSecond();
+        }
+    }
+
+    private Pair<List<User>, Boolean> populateFeedTable(Status status, String posterAlias, String lastFollowerAlias, DynamoFollowDAO followDAO, DynamoFeedDAO feedDAO) {
+        int batchAmount = 25;
+        Pair<List<User>, Boolean> follows = followDAO.getFollowers(posterAlias, batchAmount, lastFollowerAlias);
+
+        for (User user : follows.getFirst()) feedDAO.addStatus(user.getAlias(), status);
+
+        return follows;
     }
 
     @Override
