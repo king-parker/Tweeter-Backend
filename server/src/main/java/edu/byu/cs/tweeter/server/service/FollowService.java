@@ -26,11 +26,14 @@ public class FollowService extends Service {
         if (request.getFollowerAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No selected user provided");
         if (request.getLimit() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No provided limit");
 
-        Pair<List<User>, Boolean> pair = getFollowingDAO().getFollowees(request.getFollowerAlias(), request.getLimit(),
-                request.getLastFolloweeAlias());
-        List<User> followees = pair.getFirst();
-        Boolean hasMorePages = pair.getSecond();
-        return new FollowingResponse(followees, hasMorePages);
+        if (getFollowingDAO().getFolloweeCount(request.getFollowerAlias()) > 0) {
+            Pair<List<User>, Boolean> pair = getFollowingDAO().getFollowees(request.getFollowerAlias(), request.getLimit(),
+                    request.getLastFolloweeAlias());
+            List<User> followees = pair.getFirst();
+            Boolean hasMorePages = pair.getSecond();
+            return new FollowingResponse(followees, hasMorePages);
+        }
+        else return new FollowingResponse(null, false);
     }
 
     public FollowerResponse getFollowers(FollowerRequest request) {
@@ -39,11 +42,14 @@ public class FollowService extends Service {
         if (request.getFolloweeAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No selected user provided");
         if (request.getLimit() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No provided limit");
 
-        Pair<List<User>, Boolean> pair = getFollowingDAO().getFollowers(request.getFolloweeAlias(), request.getLimit(),
-                request.getLastFollowerAlias());
-        List<User> followers = pair.getFirst();
-        Boolean hasMorePages = pair.getSecond();
-        return new FollowerResponse(followers, hasMorePages);
+        if (getFollowingDAO().getFollowerCount(request.getFolloweeAlias()) > 0) {
+            Pair<List<User>, Boolean> pair = getFollowingDAO().getFollowers(request.getFolloweeAlias(), request.getLimit(),
+                    request.getLastFollowerAlias());
+            List<User> followers = pair.getFirst();
+            Boolean hasMorePages = pair.getSecond();
+            return new FollowerResponse(followers, hasMorePages);
+        }
+        else return new FollowerResponse(null, false);
     }
 
     public FollowingCountResponse getFollowingCount(FollowingCountRequest request) {
