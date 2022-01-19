@@ -73,7 +73,7 @@ public class DynamoFollowDAO implements FollowDAO {
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println(Arrays.toString(e.getStackTrace()));
-            throw new DataAccessException(Service.SERVER_ERROR_TAG + " Error creating user", e.getCause());
+            throw new DataAccessException(Service.SERVER_ERROR_TAG + " Error creating follow relationship", e.getCause());
         }
     }
 
@@ -95,7 +95,7 @@ public class DynamoFollowDAO implements FollowDAO {
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println(Arrays.toString(e.getStackTrace()));
-            throw new DataAccessException(Service.SERVER_ERROR_TAG + " Error creating user", e.getCause());
+            throw new DataAccessException(Service.SERVER_ERROR_TAG + " Error removing follow relationship", e.getCause());
         }
     }
 
