@@ -5,6 +5,8 @@ import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
 import edu.byu.cs.tweeter.model.domain.Status;
 import edu.byu.cs.tweeter.model.domain.User;
+import edu.byu.cs.tweeter.model.net.DataAccessException;
+import edu.byu.cs.tweeter.server.service.Service;
 import edu.byu.cs.tweeter.server.util.Pair;
 
 import java.util.ArrayList;
@@ -40,7 +42,16 @@ public class PaginatedRequestStrategy {
             queryRequest = queryRequest.withExclusiveStartKey(startKey);
         }
 
-        return DynamoDAOFactory.getDbClient().query(queryRequest);
+        QueryResult result;
+        try {
+            result = DynamoDAOFactory.getDbClient().query(queryRequest);
+        } catch (Exception e) {
+            String error = "Could not retrieve items from " + tableName;
+            System.out.println(error);
+            throw new DataAccessException(Service.SERVER_ERROR_TAG + " " + error, e.getCause());
+        }
+
+        return result;
     }
 
     public static <T> Pair<List<T>, Boolean> parseQueryResult(QueryResult queryResult, ItemMapper<T> mapper) {
