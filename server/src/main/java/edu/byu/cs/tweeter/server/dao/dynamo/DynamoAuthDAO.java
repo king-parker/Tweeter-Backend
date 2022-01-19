@@ -12,7 +12,7 @@ public class DynamoAuthDAO implements AuthDAO {
 
     @Override
     public AuthToken generateLoginToken(String alias) {
-        return new DynamoAuthDAO().generateLoginToken(alias);
+        return new DummyAuthDAO().generateLoginToken(alias);
     }
 
     @Override

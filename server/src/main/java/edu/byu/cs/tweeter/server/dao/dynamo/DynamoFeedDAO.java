@@ -57,9 +57,9 @@ public class DynamoFeedDAO implements FeedDAO {
                 .withString(ATT_FN_KEY, followeeStatus.getUser().getFirstName())
                 .withString(ATT_LN_KEY, followeeStatus.getUser().getLastName())
                 .withString(ATT_PAL_KEY, followeeStatus.getUser().getAlias())
-                .withString(ATT_IMURL_NAME, followeeStatus.getUser().getImageUrl())
-                .withStringSet(ATT_URLS_KEY, new HashSet<>(followeeStatus.getUrls()))
-                .withStringSet(ATT_MEN_KEY, new HashSet<>(followeeStatus.getMentions()));
+                .withString(ATT_IMURL_NAME, followeeStatus.getUser().getImageUrl());
+        if (followeeStatus.getUrls() != null) item.withStringSet(ATT_URLS_KEY, new HashSet<>(followeeStatus.getUrls()));
+        if (followeeStatus.getMentions() != null) item.withStringSet(ATT_MEN_KEY, new HashSet<>(followeeStatus.getMentions()));
         PutItemSpec spec = new PutItemSpec().withItem(item);
 
         try {

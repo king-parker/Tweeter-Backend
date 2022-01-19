@@ -41,9 +41,9 @@ public class DynamoStoryDAO implements StoryDAO {
                 .withString(ATT_POST_KEY, status.getPost())
                 .withString(ATT_FN_KEY, status.getUser().getFirstName())
                 .withString(ATT_LN_KEY, status.getUser().getLastName())
-                .withString(ATT_IMURL_NAME, status.getUser().getImageUrl())
-                .withStringSet(ATT_URLS_KEY, new HashSet<>(status.getUrls()))
-                .withStringSet(ATT_MEN_KEY, new HashSet<>(status.getMentions()));
+                .withString(ATT_IMURL_NAME, status.getUser().getImageUrl());
+        if (status.getUrls() != null) item.withStringSet(ATT_URLS_KEY, new HashSet<>(status.getUrls()));
+        if (status.getMentions() != null) item.withStringSet(ATT_MEN_KEY, new HashSet<>(status.getMentions()));
         PutItemSpec spec = new PutItemSpec().withItem(item);
 
         try {
