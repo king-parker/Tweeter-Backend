@@ -5,19 +5,19 @@ import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.util.Timestamp;
 import edu.byu.cs.tweeter.server.dao.dynamo.DynamoFeedDAO;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.List;
 
 public class PutFeedPractice {
 
     public static void main(String[] args) {
         String follower ="@ashitaka";
         User user = new User("Princess", "Mononoke", "@san", "https://pk-tweeter-profile-images.s3.us-west-2.amazonaws.com/san");
-        Status status = new Status("@eboshi stinks for killing wolves. You should visit https://earthjustice.org/.",
+        Status status = new Status("@eboshi and @jigo stinks for killing wolves. You should visit https://earthjustice.org/.",
                 user,
                 Timestamp.getDisplayString(Timestamp.getDatetime()),
-                new ArrayList<>(Collections.singleton("https://earthjustice.org/")),
-                new ArrayList<>(Collections.singleton("@eboshi")));
+                List.of("https://earthjustice.org/"),
+                Arrays.asList("@eboshi", "@jigo"));
 
         DynamoFeedDAO dao = new DynamoFeedDAO();
         dao.addStatus(follower, status);

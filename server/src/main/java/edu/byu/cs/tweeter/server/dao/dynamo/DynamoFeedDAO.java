@@ -15,6 +15,7 @@ import edu.byu.cs.tweeter.server.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 public class DynamoFeedDAO implements FeedDAO {
@@ -58,8 +59,10 @@ public class DynamoFeedDAO implements FeedDAO {
 
             List<String> urls = new ArrayList<>();
             List<String> mentions = new ArrayList<>();
-            if (item.containsKey(ATT_IMURL_NAME)) urls = item.get(ATT_URLS_KEY).getNS();
-            if (item.containsKey(ATT_MEN_KEY)) mentions = item.get(ATT_MEN_KEY).getNS();
+            if (item.containsKey(ATT_URLS_KEY))
+                urls = item.get(ATT_URLS_KEY).getSS();
+            if (item.containsKey(ATT_MEN_KEY))
+                mentions = item.get(ATT_MEN_KEY).getSS();
 
             User user = new User(firstname, lastname, alias, image);
             return new Status(post, user, timestamp, urls, mentions);
@@ -75,8 +78,8 @@ public class DynamoFeedDAO implements FeedDAO {
                 .withString(ATT_LN_KEY, followeeStatus.getUser().getLastName())
                 .withString(ATT_PAL_KEY, followeeStatus.getUser().getAlias())
                 .withString(ATT_IMURL_NAME, followeeStatus.getUser().getImageUrl())
-                .withList(ATT_URLS_KEY, followeeStatus.getUrls())
-                .withList(ATT_MEN_KEY, followeeStatus.getMentions());
+                .withStringSet(ATT_URLS_KEY, new HashSet<>(followeeStatus.getUrls()))
+                .withStringSet(ATT_MEN_KEY, new HashSet<>(followeeStatus.getMentions()));
         PutItemSpec spec = new PutItemSpec().withItem(item);
 
         try {
