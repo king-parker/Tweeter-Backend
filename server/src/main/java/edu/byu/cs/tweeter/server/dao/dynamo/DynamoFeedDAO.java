@@ -13,6 +13,7 @@ import edu.byu.cs.tweeter.server.dao.dummy.DummyFeedDAO;
 import edu.byu.cs.tweeter.server.service.Service;
 import edu.byu.cs.tweeter.server.util.Pair;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -54,12 +55,15 @@ public class DynamoFeedDAO implements FeedDAO {
             String alias = item.get(ATT_PAL_KEY).getS();
             String image = item.get(ATT_IMURL_NAME).getS();
             String timestamp = item.get(SORT_KEY).getS();
-            List<String> urls = item.get(ATT_URLS_KEY).getNS();
-            List<String> mentions = item.get(ATT_MEN_KEY).getNS();
+
+            List<String> urls = new ArrayList<>();
+            List<String> mentions = new ArrayList<>();
+            if (item.containsKey(ATT_IMURL_NAME)) urls = item.get(ATT_URLS_KEY).getNS();
+            if (item.containsKey(ATT_MEN_KEY)) mentions = item.get(ATT_MEN_KEY).getNS();
+
             User user = new User(firstname, lastname, alias, image);
             return new Status(post, user, timestamp, urls, mentions);
         });
-//        return new DummyFeedDAO().getFeed(followeeStatusAlias, limit, lastFeedStatus);
     }
 
     @Override
