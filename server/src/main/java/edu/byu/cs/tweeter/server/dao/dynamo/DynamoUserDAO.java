@@ -13,6 +13,8 @@ import edu.byu.cs.tweeter.model.net.DataAccessException;
 import edu.byu.cs.tweeter.server.dao.UserDAO;
 import edu.byu.cs.tweeter.server.service.Service;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 public class DynamoUserDAO implements UserDAO {
@@ -74,13 +76,17 @@ public class DynamoUserDAO implements UserDAO {
             throw new DataAccessException(Service.SERVER_ERROR_TAG + " " + error);
         }
 
+        password = hashPassword(password);
+
         if (outcome.getString(ATT_PASS_NAME).equals(password)) return user;
         else return null;
     }
 
     @Override
     public User registerNewUser(String firstName, String lastName, String username, String password, String imageBytesBase64) {
-        System.out.println("%s: Attempting to register a new user%n");
+        System.out.printf("%s: Attempting to register a new user%n", LOG_TAG);
+
+        password = hashPassword(password);
 
         try {
             getUser(username);
@@ -99,7 +105,7 @@ public class DynamoUserDAO implements UserDAO {
                 .withString(ATT_IMURL_NAME, imageUrl)
                 .withInt(ATT_FWC_NAME, 0)
                 .withInt(ATT_FEC_NAME, 0);
-        PutItemSpec spec = new PutItemSpec().withItem(item);//.withConditionExpression("attribute_not_exists(" + PARTITION_KEY + ")");
+        PutItemSpec spec = new PutItemSpec().withItem(item);
 
         System.out.printf("%s: Attempting to add new user to database%n", LOG_TAG);
         try {
@@ -196,5 +202,33 @@ public class DynamoUserDAO implements UserDAO {
             System.out.printf("%s: %s%n", LOG_TAG, error);
             throw new DataAccessException(Service.SERVER_ERROR_TAG + " " + error);
         }
+    }
+
+    protected String hashPassword(String passwordToHash) {
+        String hashedPassword;
+        String error = "Error creating user";
+
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            md.update(passwordToHash.getBytes());
+            byte[] bytes = md.digest();
+            StringBuilder sb = new StringBuilder();
+            for (byte aByte : bytes) {
+                sb.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
+            }
+            hashedPassword = sb.toString();
+
+            if (hashedPassword.equals(passwordToHash)) {
+                System.out.printf("%s: %s from hashing error%n", LOG_TAG, error);
+                throw new DataAccessException(Service.SERVER_ERROR_TAG + " " + error);
+            }
+        } catch (NoSuchAlgorithmException e) {
+            System.out.printf("%s: %s from hashing error%n", LOG_TAG, error);
+            System.out.printf("%s: %s%n", LOG_TAG, e.getMessage());
+            System.out.println(Arrays.toString(e.getStackTrace()));
+            throw new DataAccessException(Service.SERVER_ERROR_TAG + " " + error);
+        }
+
+        return hashedPassword;
     }
 }
