@@ -42,8 +42,14 @@ public class DynamoStoryDAO implements StoryDAO {
                 .withString(ATT_FN_KEY, status.getUser().getFirstName())
                 .withString(ATT_LN_KEY, status.getUser().getLastName())
                 .withString(ATT_IMURL_NAME, status.getUser().getImageUrl());
-        if (status.getUrls() != null) item.withStringSet(ATT_URLS_KEY, new HashSet<>(status.getUrls()));
-        if (status.getMentions() != null) item.withStringSet(ATT_MEN_KEY, new HashSet<>(status.getMentions()));
+
+        if (status.getUrls() != null && !status.getUrls().isEmpty()) {
+            item.withStringSet(ATT_URLS_KEY, new HashSet<>(status.getUrls()));
+        }
+        if (status.getMentions() != null && !status.getMentions().isEmpty()) {
+            item.withStringSet(ATT_MEN_KEY, new HashSet<>(status.getMentions()));
+        }
+
         PutItemSpec spec = new PutItemSpec().withItem(item);
 
         try {
@@ -56,7 +62,7 @@ public class DynamoStoryDAO implements StoryDAO {
 
         DynamoFollowDAO followDAO = new DynamoFollowDAO();
         DynamoFeedDAO feedDAO = new DynamoFeedDAO();
-        Pair<List<User>, Boolean> follows = new Pair<>(null, null);
+        @SuppressWarnings("UnusedAssignment") Pair<List<User>, Boolean> follows = new Pair<>(null, null);
         String lastFollowerAlias = null;
         boolean hasMorePages = true;
 
