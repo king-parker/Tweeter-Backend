@@ -18,6 +18,8 @@ import java.util.HashSet;
 import java.util.List;
 
 public class DynamoStoryDAO implements StoryDAO {
+    private final String LOG_TAG = "DYNAMO_STORY_DAO";
+
     private final String TABLE_NAME = "tweeter-story";
     private final String PARTITION_KEY = "user_alias";
     private final String SORT_KEY = "datetime";
@@ -36,6 +38,7 @@ public class DynamoStoryDAO implements StoryDAO {
 
     @Override
     public void postStatus(Status status) {
+        System.out.printf("%s: %s is posting status: %s", LOG_TAG, status.getUserAlias(), status.getPost());
         // Put status in Story table
         Item item = new Item().withPrimaryKey(PARTITION_KEY, status.getUserAlias(), SORT_KEY, status.datetime)
                 .withString(ATT_POST_KEY, status.getPost())
