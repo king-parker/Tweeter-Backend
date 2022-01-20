@@ -11,19 +11,19 @@ public class DummyStoryDAO extends DummyDAO implements StoryDAO {
 
     @Override
     public void postStatus(Status status) {
-        // TODO: Doesn't do anything.  Replace with a real implementation.
+        // Doesn't do anything.  Replace with a real implementation.
     }
 
     @Override
     public int getStoryCount(String userAlias) {
-        // TODO: uses the dummy data.  Replace with a real implementation.
+        // uses the dummy data.  Replace with a real implementation.
         assert userAlias != null;
         return getDummyStory().size();
     }
 
     @Override
     public Pair<List<Status>, Boolean> getStory(String followerAlias, int limit, Status lastStoryStatus) {
-        // TODO: Generates dummy data. Replace with a real implementation.
+        // Generates dummy data. Replace with a real implementation.
         assert limit > 0;
         assert followerAlias != null;
 

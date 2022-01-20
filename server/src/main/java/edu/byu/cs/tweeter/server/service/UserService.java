@@ -26,7 +26,6 @@ public class UserService extends Service {
         if (request.getUsername() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No username");
         if (request.getPassword() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No password");
 
-        // TODO: Generates dummy data. Replace with a real implementation.
         User user = getUserDAO().getLoginUser(request.getUsername(), request.getPassword());
 
         if (user == null) throw new RuntimeException(BAD_REQUEST_TAG + " Username and password do not match");
@@ -43,7 +42,6 @@ public class UserService extends Service {
         if (request.getPassword() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No password");
         if (request.getImageBytesBase64() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No image");
 
-        // TODO: Generates dummy data. Replace with a real implementation.
         User user = getUserDAO().registerNewUser(request.getFirstName(), request.getLastName(), request.getUsername(),
                 request.getPassword(), request.getImageBytesBase64());
 

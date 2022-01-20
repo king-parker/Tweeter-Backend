@@ -11,14 +11,14 @@ public class DummyFeedDAO extends DummyDAO implements FeedDAO {
 
     @Override
     public Integer getFeedCount(String userAlias) {
-        // TODO: uses the dummy data.  Replace with a real implementation.
+        // uses the dummy data.  Replace with a real implementation.
         assert userAlias != null;
         return getDummyFeed().size();
     }
 
     @Override
     public Pair<List<Status>, Boolean> getFeed(String followerAlias, int limit, Status lastFeedStatus) {
-        // TODO: Generates dummy data. Replace with a real implementation.
+        // Generates dummy data. Replace with a real implementation.
         assert limit > 0;
         assert followerAlias != null;
 

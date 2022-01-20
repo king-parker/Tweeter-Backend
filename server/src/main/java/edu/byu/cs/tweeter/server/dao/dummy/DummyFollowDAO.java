@@ -1,12 +1,6 @@
 package edu.byu.cs.tweeter.server.dao.dummy;
 
 import edu.byu.cs.tweeter.model.domain.User;
-import edu.byu.cs.tweeter.model.net.request.FollowerRequest;
-import edu.byu.cs.tweeter.model.net.request.FollowingRequest;
-import edu.byu.cs.tweeter.model.net.response.FollowResponse;
-import edu.byu.cs.tweeter.model.net.response.FollowerResponse;
-import edu.byu.cs.tweeter.model.net.response.FollowingResponse;
-import edu.byu.cs.tweeter.model.net.response.UnfollowResponse;
 import edu.byu.cs.tweeter.server.dao.FollowDAO;
 import edu.byu.cs.tweeter.server.util.Pair;
 
@@ -20,7 +14,7 @@ public class DummyFollowDAO extends DummyDAO implements FollowDAO {
 
     @Override
     public boolean isFollower(String followerAlias, String followeeAlias) {
-        // TODO: uses the dummy data.  Replace with a real implementation.
+        // uses the dummy data.  Replace with a real implementation.
         assert followerAlias != null;
         assert followeeAlias != null;
         return followerAlias.length() > followeeAlias.length();
@@ -28,14 +22,14 @@ public class DummyFollowDAO extends DummyDAO implements FollowDAO {
 
     @Override
     public void follow(String followerAlias, String followeeAlias) {
-        // TODO: Doesn't do anything.  Replace with a real implementation.
+        // Doesn't do anything.  Replace with a real implementation.
         assert followerAlias != null;
         assert followeeAlias != null;
     }
 
     @Override
     public void unfollow(String followerAlias, String followeeAlias) {
-        // TODO: Doesn't do anything.  Replace with a real implementation.
+        // Doesn't do anything.  Replace with a real implementation.
         assert followerAlias != null;
         assert followeeAlias != null;
     }
@@ -49,14 +43,14 @@ public class DummyFollowDAO extends DummyDAO implements FollowDAO {
      */
     @Override
     public int getFolloweeCount(String followerAlias) {
-        // TODO: uses the dummy data.  Replace with a real implementation.
+        // uses the dummy data.  Replace with a real implementation.
         assert followerAlias != null;
         return getDummyFollowees().size() + 1;
     }
 
     @Override
     public Pair<List<User>, Boolean> getFollowees(String followerAlias, int limit, String lastFolloweeAlias) {
-        // TODO: Generates dummy data. Replace with a real implementation.
+        // Generates dummy data. Replace with a real implementation.
         assert limit > 0;
         assert followerAlias != null;
 
@@ -112,14 +106,14 @@ public class DummyFollowDAO extends DummyDAO implements FollowDAO {
 
     @Override
     public int getFollowerCount(String followeeAlias) {
-        // TODO: uses the dummy data.  Replace with a real implementation.
+        // uses the dummy data.  Replace with a real implementation.
         assert followeeAlias != null;
         return getDummyFollowers().size() - 1;
     }
 
     @Override
     public Pair<List<User>, Boolean> getFollowers(String followeeAlias, int limit, String lastFollowerAlias) {
-        // TODO: Generates dummy data. Replace with a real implementation.
+        // Generates dummy data. Replace with a real implementation.
         assert limit > 0;
         assert followeeAlias != null;
 
