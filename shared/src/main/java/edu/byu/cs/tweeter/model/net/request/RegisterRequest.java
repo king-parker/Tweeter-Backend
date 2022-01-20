@@ -57,4 +57,15 @@ public class RegisterRequest extends Request {
     public void setImageBytesBase64(String imageBytesBase64) {
         this.imageBytesBase64 = imageBytesBase64;
     }
+
+    @Override
+    public String toString() {
+        return "RegisterRequest{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", imageBytesBase64='" + imageBytesBase64 + '\'' +
+                '}';
+    }
 }

@@ -16,4 +16,13 @@ public class IsFollowingResponse extends Response {
     public Boolean getIsFollower() {
         return isFollower;
     }
+
+    @Override
+    public String toString() {
+        return "IsFollowingResponse{" +
+                "success=" + this.isSuccess() +
+                ", message='" + this.getMessage() + '\'' +
+                ", isFollower=" + isFollower +
+                '}';
+    }
 }

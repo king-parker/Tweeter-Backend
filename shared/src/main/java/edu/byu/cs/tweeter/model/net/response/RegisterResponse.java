@@ -25,4 +25,14 @@ public class RegisterResponse extends Response {
     public AuthToken getAuthToken() {
         return authToken;
     }
+
+    @Override
+    public String toString() {
+        return "RegisterResponse{" +
+                "success=" + this.isSuccess() +
+                ", message='" + this.getMessage() + '\'' +
+                ", user=" + user +
+                ", authToken=" + authToken +
+                '}';
+    }
 }

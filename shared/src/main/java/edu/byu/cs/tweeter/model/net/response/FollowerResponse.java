@@ -36,4 +36,14 @@ public class FollowerResponse extends PagedResponse {
     public int hashCode() {
         return Objects.hash(followers);
     }
+
+    @Override
+    public String toString() {
+        return "FollowerResponse{" +
+                "success=" + this.isSuccess() +
+                ", message='" + this.getMessage() + '\'' +
+                ", hasMorePages=" + this.getHasMorePages() +
+                ", followers=" + followers +
+                "} ";
+    }
 }

@@ -9,4 +9,12 @@ public class LogoutResponse extends Response {
     public LogoutResponse() {
         super(true);
     }
+
+    @Override
+    public String toString() {
+        return "LogoutResponse{" +
+                "success=" + this.isSuccess() +
+                ", message='" + this.getMessage() + '\'' +
+                '}';
+    }
 }

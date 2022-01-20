@@ -20,4 +20,13 @@ public class GetUserRequest extends AuthorizedRequest {
     public void setUserAlias(String userAlias) {
         this.userAlias = userAlias;
     }
+
+    @Override
+    public String toString() {
+        return "GetUserRequest{" +
+                "authToken=" + this.getAuthToken() +
+                ", currUserAlias='" + this.getCurrUserAlias() + '\'' +
+                ", userAlias='" + userAlias + '\'' +
+                '}';
+    }
 }

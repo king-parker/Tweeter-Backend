@@ -16,4 +16,13 @@ public class FollowersCountResponse extends Response {
     public Integer getCount() {
         return count;
     }
+
+    @Override
+    public String toString() {
+        return "FollowersCountResponse{" +
+                "success=" + this.isSuccess() +
+                ", message='" + this.getMessage() + '\'' +
+                ", count=" + count +
+                '}';
+    }
 }

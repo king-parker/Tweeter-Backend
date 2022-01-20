@@ -16,4 +16,13 @@ public class FollowingCountResponse extends Response {
     public Integer getCount() {
         return count;
     }
+
+    @Override
+    public String toString() {
+        return "FollowingCountResponse{" +
+                "success=" + this.isSuccess() +
+                ", message='" + this.getMessage() + '\'' +
+                ", count=" + count +
+                '}';
+    }
 }

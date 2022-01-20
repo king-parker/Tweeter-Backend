@@ -23,4 +23,13 @@ public class PostStatusRequest extends AuthorizedRequest {
     public void setStatus(Status status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "PostStatusRequest{" +
+                "authToken=" + this.getAuthToken() +
+                ", currUserAlias='" + this.getCurrUserAlias() + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

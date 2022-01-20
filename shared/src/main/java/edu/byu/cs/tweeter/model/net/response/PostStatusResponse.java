@@ -9,4 +9,12 @@ public class PostStatusResponse extends Response {
     public PostStatusResponse() {
         super(true);
     }
+
+    @Override
+    public String toString() {
+        return "PostStatusResponse{" +
+                "success=" + this.isSuccess() +
+                ", message='" + this.getMessage() + '\'' +
+                '}';
+    }
 }
