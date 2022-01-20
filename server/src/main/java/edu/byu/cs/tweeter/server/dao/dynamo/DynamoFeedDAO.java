@@ -17,6 +17,8 @@ import java.util.HashSet;
 import java.util.List;
 
 public class DynamoFeedDAO implements FeedDAO {
+    private final String LOG_TAG = "DYNAMO_FEED_DAO";
+    
     private final String TABLE_NAME = "tweeter-feed";
     private final String PARTITION_KEY = "user_alias";
     private final String SORT_KEY = "datetime";
@@ -47,7 +49,9 @@ public class DynamoFeedDAO implements FeedDAO {
         QueryResult queryResult = PaginatedRequestStrategy.makeQuery(TABLE_NAME, PARTITION_KEY, followeeStatusAlias,
                 SORT_KEY, lastTimestamp, limit, null);
 
-        return PaginatedRequestStrategy.StatusExtractor.extractResults(queryResult, ATT_POST_KEY, ATT_FN_KEY, ATT_LN_KEY, ATT_PAL_KEY, ATT_IMURL_NAME, SORT_KEY, ATT_URLS_KEY, ATT_MEN_KEY);
+        System.out.printf("%s:Retrieving feed for %s%n", LOG_TAG, followeeStatusAlias);
+        return PaginatedRequestStrategy.StatusExtractor.extractResults(queryResult, ATT_POST_KEY, ATT_FN_KEY,
+                ATT_LN_KEY, ATT_PAL_KEY, ATT_IMURL_NAME, SORT_KEY, ATT_URLS_KEY, ATT_MEN_KEY);
     }
 
     @Override
@@ -67,7 +71,9 @@ public class DynamoFeedDAO implements FeedDAO {
         } catch (Exception e) {
             System.out.println(e.getMessage());
             System.out.println(Arrays.toString(e.getStackTrace()));
-            throw new DataAccessException(String.format("%s Error adding status to %s's feed", Service.SERVER_ERROR_TAG, alias) , e.getCause());
+            throw new DataAccessException(String.format("%s Error adding status to %s's feed%n", Service.SERVER_ERROR_TAG, alias) , e.getCause());
         }
+        System.out.printf("%s:%s had status posted to their feed by %s: %s%n",
+                LOG_TAG, followeeStatus.getUserAlias(), alias, followeeStatus.getPost());
     }
 }

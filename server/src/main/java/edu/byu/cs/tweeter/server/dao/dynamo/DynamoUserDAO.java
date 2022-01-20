@@ -16,6 +16,8 @@ import edu.byu.cs.tweeter.server.service.Service;
 import java.util.Arrays;
 
 public class DynamoUserDAO implements UserDAO {
+    private final String LOG_TAG = "DYNAMO_USER_DAO";
+
     private final String TABLE_NAME = "tweeter-user";
     private final String PARTITION_KEY = "user_alias";
     private final String ATT_FN_NAME = "first_name";
@@ -33,6 +35,8 @@ public class DynamoUserDAO implements UserDAO {
 
     @Override
     public User getUser(String alias) {
+        System.out.printf("%s: Getting user information for %s%n", LOG_TAG, alias);
+
         GetItemSpec spec = new GetItemSpec().withPrimaryKey(PARTITION_KEY, alias);
         User user;
 
@@ -40,10 +44,12 @@ public class DynamoUserDAO implements UserDAO {
 
         if (outcome != null) {
             user = new User(outcome.getString(ATT_FN_NAME), outcome.getString(ATT_LN_NAME), outcome.getString(PARTITION_KEY), outcome.getString(ATT_IMURL_NAME));
+            System.out.printf("%s: Retrieved user:%n", LOG_TAG);
+            System.out.println("\t" + user);
         }
         else {
             String error = "Could not retrieve user";
-            System.out.println(error);
+            System.out.printf("%s: %s%n", LOG_TAG, error);
             throw new DataAccessException(Service.SERVER_ERROR_TAG + " " + error);
         }
 
@@ -52,6 +58,7 @@ public class DynamoUserDAO implements UserDAO {
 
     @Override
     public User getLoginUser(String username, String password) {
+        System.out.printf("%s: Attempting to log in user: %s%n", LOG_TAG, username);
         GetItemSpec spec = new GetItemSpec().withPrimaryKey(PARTITION_KEY, username);
         User user;
 
@@ -59,10 +66,11 @@ public class DynamoUserDAO implements UserDAO {
 
         if (outcome != null) {
             user = new User(outcome.getString(ATT_FN_NAME), outcome.getString(ATT_LN_NAME), outcome.getString(PARTITION_KEY), outcome.getString(ATT_IMURL_NAME));
+            System.out.printf("%s: Login attempt successful%n", LOG_TAG);
         }
         else {
             String error = "Could not retrieve user";
-            System.out.println(error);
+            System.out.printf("%s: %s%n", LOG_TAG, error);
             throw new DataAccessException(Service.SERVER_ERROR_TAG + " " + error);
         }
 
@@ -72,9 +80,11 @@ public class DynamoUserDAO implements UserDAO {
 
     @Override
     public User registerNewUser(String firstName, String lastName, String username, String password, String imageBytesBase64) {
+        System.out.println("%s: Attempting to register a new user%n");
 
         try {
             getUser(username);
+            System.out.printf("%s: Could not register due to taken username%n", LOG_TAG);
             return null;
         } catch (DataAccessException e) {
             // Username available to be used, do nothing
@@ -91,20 +101,21 @@ public class DynamoUserDAO implements UserDAO {
                 .withInt(ATT_FEC_NAME, 0);
         PutItemSpec spec = new PutItemSpec().withItem(item);//.withConditionExpression("attribute_not_exists(" + PARTITION_KEY + ")");
 
+        System.out.printf("%s: Attempting to add new user to database%n", LOG_TAG);
         try {
             PutItemOutcome outcome = table.putItem(spec);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.printf("%s: %s%n", LOG_TAG, e.getMessage());
             System.out.println(Arrays.toString(e.getStackTrace()));
             throw new DataAccessException(Service.SERVER_ERROR_TAG + " Error creating user", e.getCause());
         }
 
-
-
+        System.out.printf("%s: User registered: %s%n", LOG_TAG, username);
         return new User(firstName, lastName, username, imageUrl);
     }
 
     public int getFollowerCount(String alias) {
+        System.out.printf("%s: Obtaining the count of who follows %s%n", LOG_TAG, alias);
         GetItemSpec spec = new GetItemSpec().withPrimaryKey(PARTITION_KEY, alias);
 
         Item outcome = table.getItem(spec);
@@ -114,12 +125,13 @@ public class DynamoUserDAO implements UserDAO {
         }
         else {
             String error = "Could not retrieve user to get follow count";
-            System.out.println(error);
+            System.out.printf("%s: %s%n", LOG_TAG, error);
             throw new DataAccessException(Service.SERVER_ERROR_TAG + " " + error);
         }
     }
 
     public int getFolloweeCount(String alias) {
+        System.out.printf("%s: Obtaining the count of who %s follows%n", LOG_TAG, alias);
         GetItemSpec spec = new GetItemSpec().withPrimaryKey(PARTITION_KEY, alias);
 
         Item outcome = table.getItem(spec);
@@ -129,7 +141,7 @@ public class DynamoUserDAO implements UserDAO {
         }
         else {
             String error = "Could not retrieve user to get followee count";
-            System.out.println(error);
+            System.out.printf("%s: %s%n", LOG_TAG, error);
             throw new DataAccessException(Service.SERVER_ERROR_TAG + " " + error);
         }
     }
@@ -139,9 +151,11 @@ public class DynamoUserDAO implements UserDAO {
         int increment;
 
         if (newFollow) {
+            System.out.printf("%s: Increasing the follower count for %s%n", LOG_TAG, alias);
             increment = 1;
         }
         else {
+            System.out.printf("%s: Decreasing the follower count for %s%n", LOG_TAG, alias);
             increment = -1;
         }
         UpdateItemSpec spec = new UpdateItemSpec().withPrimaryKey(PARTITION_KEY, alias)
@@ -153,7 +167,7 @@ public class DynamoUserDAO implements UserDAO {
             UpdateItemOutcome outcome = table.updateItem(spec);
         } catch (Exception e) {
             String error = "Could not update user count";
-            System.out.println(error);
+            System.out.printf("%s: %s%n", LOG_TAG, error);
             throw new DataAccessException(Service.SERVER_ERROR_TAG + " " + error);
         }
     }
@@ -163,9 +177,11 @@ public class DynamoUserDAO implements UserDAO {
         int increment;
 
         if (newFollowee) {
+            System.out.printf("%s: Increasing the following count for %s%n", LOG_TAG, alias);
             increment = 1;
         }
         else {
+            System.out.printf("%s: Decreasing the following count for %s%n", LOG_TAG, alias);
             increment = -1;
         }
         UpdateItemSpec spec = new UpdateItemSpec().withPrimaryKey(PARTITION_KEY, alias)
@@ -177,7 +193,7 @@ public class DynamoUserDAO implements UserDAO {
             UpdateItemOutcome outcome = table.updateItem(spec);
         } catch (Exception e) {
             String error = "Could not update user count";
-            System.out.println(error);
+            System.out.printf("%s: %s%n", LOG_TAG, error);
             throw new DataAccessException(Service.SERVER_ERROR_TAG + " " + error);
         }
     }

@@ -12,6 +12,8 @@ import java.util.List;
  * Contains the business logic for getting the users a user is following.
  */
 public class FollowService extends Service {
+    private final String LOG_TAG = "FOLLOW_SERVICE";
+
     public FollowService() {
         super();
     }
@@ -21,12 +23,22 @@ public class FollowService extends Service {
     }
 
     public FollowingResponse getFollowees(FollowingRequest request) {
+        System.out.printf("%s: Begin getFollowees service%n", LOG_TAG);
 
         authenticateRequest(request);
-        if (request.getFollowerAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No selected user provided");
-        if (request.getLimit() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No provided limit");
+        if (request.getFollowerAlias() == null) {
+            String error = "No selected user provided";
+            System.out.printf("%s: %s%n", LOG_TAG, error);
+            throw new RuntimeException(BAD_REQUEST_TAG + " " + error);
+        }
+        if (request.getLimit() == null) {
+            String error = "No provided limit";
+            System.out.printf("%s: %s%n", LOG_TAG, error);
+            throw new RuntimeException(BAD_REQUEST_TAG + " " + error);
+        }
 
         if (getFollowingDAO().getFolloweeCount(request.getFollowerAlias()) > 0) {
+            System.out.printf("%s: Getting a page of followees%n", LOG_TAG);
             Pair<List<User>, Boolean> pair = getFollowingDAO().getFollowees(request.getFollowerAlias(), request.getLimit(),
                     request.getLastFolloweeAlias());
             List<User> followees = pair.getFirst();
@@ -37,12 +49,22 @@ public class FollowService extends Service {
     }
 
     public FollowerResponse getFollowers(FollowerRequest request) {
+        System.out.printf("%s: Begin getFollowers service%n", LOG_TAG);
 
         authenticateRequest(request);
-        if (request.getFolloweeAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No selected user provided");
-        if (request.getLimit() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No provided limit");
+        if (request.getFolloweeAlias() == null) {
+            String error = "No selected user provided";
+            System.out.printf("%s: %s%n", LOG_TAG, error);
+            throw new RuntimeException(BAD_REQUEST_TAG + " " + error);
+        }
+        if (request.getLimit() == null) {
+            String error = "No provided limit";
+            System.out.printf("%s: %s%n", LOG_TAG, error);
+            throw new RuntimeException(BAD_REQUEST_TAG + " " + error);
+        }
 
         if (getFollowingDAO().getFollowerCount(request.getFolloweeAlias()) > 0) {
+            System.out.printf("%s: Getting a page of followers%n", LOG_TAG);
             Pair<List<User>, Boolean> pair = getFollowingDAO().getFollowers(request.getFolloweeAlias(), request.getLimit(),
                     request.getLastFollowerAlias());
             List<User> followers = pair.getFirst();
