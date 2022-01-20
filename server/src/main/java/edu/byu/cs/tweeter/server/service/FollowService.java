@@ -79,7 +79,7 @@ public class FollowService extends Service {
         authenticateRequest(request);
         if (request.getFollowerAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No selected user provided");
 
-        int count = getFollowingDAO().getFolloweeCount(request.getCurrUserAlias());
+        int count = getFollowingDAO().getFolloweeCount(request.getFollowerAlias());
         return new FollowingCountResponse(count);
     }
 
@@ -88,7 +88,7 @@ public class FollowService extends Service {
         authenticateRequest(request);
         if (request.getFolloweeAlias() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No selected user provided");
 
-        int count = getFollowingDAO().getFollowerCount(request.getCurrUserAlias());
+        int count = getFollowingDAO().getFollowerCount(request.getFolloweeAlias());
         return new FollowersCountResponse(count);
     }
 
