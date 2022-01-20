@@ -40,6 +40,8 @@ public class AuthToken implements Serializable {
 
     public Boolean isValid;
 
+    public String lastActivity;
+
     private AuthToken() {
     }
 
@@ -58,6 +60,14 @@ public class AuthToken implements Serializable {
         this.token = token;
         this.datetime = datetime;
         this.isValid = isValid;
+    }
+
+    public AuthToken(String userAlias, String token, String datetime, Boolean isValid, String lastActivity) {
+        this.userAlias = userAlias;
+        this.token = token;
+        this.datetime = datetime;
+        this.isValid = isValid;
+        this.lastActivity = lastActivity;
     }
 
     public String getUserAlias() {
@@ -92,6 +102,22 @@ public class AuthToken implements Serializable {
         this.isValid = isValid;
     }
 
+    public Boolean getValid() {
+        return isValid;
+    }
+
+    public void setValid(Boolean valid) {
+        isValid = valid;
+    }
+
+    public String getLastActivity() {
+        return lastActivity;
+    }
+
+    public void setLastActivity(String lastActivity) {
+        this.lastActivity = lastActivity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -103,5 +129,16 @@ public class AuthToken implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(userAlias, token, datetime);
+    }
+
+    @Override
+    public String toString() {
+        return "AuthToken{" +
+                "userAlias='" + userAlias + '\'' +
+                ", token='" + token + '\'' +
+                ", datetime='" + datetime + '\'' +
+                ", isValid=" + isValid +
+                ", lastActivity='" + lastActivity + '\'' +
+                '}';
     }
 }
