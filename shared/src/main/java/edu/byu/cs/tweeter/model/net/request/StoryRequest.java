@@ -47,4 +47,15 @@ public class StoryRequest extends AuthorizedRequest {
     public void setLastStoryStatus(Status lastStoryStatus) {
         this.lastStoryStatus = lastStoryStatus;
     }
+
+    @Override
+    public String toString() {
+        return "StoryRequest{" +
+                "authToken=" + this.getAuthToken() +
+                ", currUserAlias='" + this.getCurrUserAlias() + '\'' +
+                ", followerAlias='" + followerAlias + '\'' +
+                ", limit=" + limit +
+                ", lastStoryStatus=" + lastStoryStatus +
+                '}';
+    }
 }

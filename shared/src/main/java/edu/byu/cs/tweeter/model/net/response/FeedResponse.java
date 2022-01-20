@@ -36,4 +36,14 @@ public class FeedResponse extends PagedResponse {
     public int hashCode() {
         return Objects.hash(feed);
     }
+
+    @Override
+    public String toString() {
+        return "FeedResponse{" +
+                "success=" + this.isSuccess() +
+                ", message='" + this.getMessage() + '\'' +
+                ", hasMorePages=" + this.getHasMorePages() +
+                ", feed=" + feed +
+                "} ";
+    }
 }

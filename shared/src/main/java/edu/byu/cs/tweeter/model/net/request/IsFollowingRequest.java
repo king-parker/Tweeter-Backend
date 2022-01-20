@@ -38,4 +38,14 @@ public class IsFollowingRequest extends AuthorizedRequest {
     public void setFolloweeAlias(String followeeAlias) {
         this.followeeAlias = followeeAlias;
     }
+
+    @Override
+    public String toString() {
+        return "IsFollowingRequest{" +
+                "authToken=" + this.getAuthToken() +
+                ", currUserAlias='" + this.getCurrUserAlias() + '\'' +
+                ", followerAlias='" + followerAlias + '\'' +
+                ", followeeAlias='" + followeeAlias + '\'' +
+                '}';
+    }
 }

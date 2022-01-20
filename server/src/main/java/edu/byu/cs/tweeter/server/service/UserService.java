@@ -10,16 +10,22 @@ import edu.byu.cs.tweeter.model.net.response.GetUserResponse;
 import edu.byu.cs.tweeter.model.net.response.LoginResponse;
 import edu.byu.cs.tweeter.model.net.response.LogoutResponse;
 import edu.byu.cs.tweeter.model.net.response.RegisterResponse;
-import edu.byu.cs.tweeter.server.util.FakeData;
+import edu.byu.cs.tweeter.server.dao.DAOFactory;
 
 public class UserService extends Service {
+    public UserService() {
+        super();
+    }
+
+    public UserService(DAOFactory daoFactory) {
+        super(daoFactory);
+    }
 
     public LoginResponse login(LoginRequest request) {
 
         if (request.getUsername() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No username");
         if (request.getPassword() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No password");
 
-        // TODO: Generates dummy data. Replace with a real implementation.
         User user = getUserDAO().getLoginUser(request.getUsername(), request.getPassword());
 
         if (user == null) throw new RuntimeException(BAD_REQUEST_TAG + " Username and password do not match");
@@ -36,7 +42,6 @@ public class UserService extends Service {
         if (request.getPassword() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No password");
         if (request.getImageBytesBase64() == null) throw new RuntimeException(BAD_REQUEST_TAG + " No image");
 
-        // TODO: Generates dummy data. Replace with a real implementation.
         User user = getUserDAO().registerNewUser(request.getFirstName(), request.getLastName(), request.getUsername(),
                 request.getPassword(), request.getImageBytesBase64());
 
@@ -61,7 +66,7 @@ public class UserService extends Service {
 
         authenticateRequest(request);
 
-        getAuthDAO().endUserSession(request.getAuthToken());
+        getAuthDAO().endUserSession(request.getCurrUserAlias(), request.getAuthToken());
         return new LogoutResponse();
     }
 }

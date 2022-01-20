@@ -16,6 +16,7 @@ public class Status implements Serializable {
      * User who sent the status.
      */
     public User user;
+    public String userAlias;
     /**
      * String representation of the date/time at which the status was sent.
      */
@@ -32,23 +33,44 @@ public class Status implements Serializable {
     public Status() {
     }
 
-    public Status(String post, User user, String datetime, List<String> urls, List<String> mentions) {
+    public Status(String post, String userAlias, String datetime, List<String> urls, List<String> mentions) {
         this.post = post;
-        this.user = user;
+        this.userAlias = userAlias;
         this.datetime = datetime;
         this.urls = urls;
         this.mentions = mentions;
     }
 
-    public void setUser(User user) {
+    public Status(String post, User user, String datetime, List<String> urls, List<String> mentions) {
+        this.post = post;
         this.user = user;
+        this.userAlias = user.getAlias();
+        this.datetime = datetime;
+        this.urls = urls;
+        this.mentions = mentions;
     }
 
     public User getUser() {
         return user;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setUserAlias(String userAlias) {
+        this.userAlias = userAlias;
+    }
+
+    public String getUserAlias() {
+        return userAlias;
+    }
+
     public String getDate() {
+        return datetime;
+    }
+
+    public String getDatetime() {
         return datetime;
     }
 
@@ -70,7 +92,7 @@ public class Status implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Status status = (Status) o;
         return Objects.equals(post, status.post) &&
-                Objects.equals(user, status.user) &&
+                Objects.equals(userAlias, status.userAlias) &&
                 Objects.equals(datetime, status.datetime) &&
                 Objects.equals(mentions, status.mentions) &&
                 Objects.equals(urls, status.urls);
@@ -78,14 +100,14 @@ public class Status implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(post, user, datetime, mentions, urls);
+        return Objects.hash(post, userAlias, datetime, mentions, urls);
     }
 
     @Override
     public String toString() {
         return "Status{" +
                 "post='" + post + '\'' +
-                ", user=" + user +
+                ", user=" + userAlias +
                 ", datetime=" + datetime +
                 ", mentions=" + mentions +
                 ", urls=" + urls +

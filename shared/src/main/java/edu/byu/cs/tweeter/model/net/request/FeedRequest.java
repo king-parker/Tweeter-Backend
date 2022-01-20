@@ -48,4 +48,15 @@ public class FeedRequest extends AuthorizedRequest {
     public void setLastFeedStatus(Status lastFeedStatus) {
         this.lastFeedStatus = lastFeedStatus;
     }
+
+    @Override
+    public String toString() {
+        return "FeedRequest{" +
+                "authToken=" + this.getAuthToken() +
+                ", currUserAlias='" + this.getCurrUserAlias() + '\'' +
+                ", followerAlias='" + followerAlias + '\'' +
+                ", limit=" + limit +
+                ", lastFeedStatus=" + lastFeedStatus +
+                '}';
+    }
 }

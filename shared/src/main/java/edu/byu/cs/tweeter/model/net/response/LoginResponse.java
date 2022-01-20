@@ -50,4 +50,14 @@ public class LoginResponse extends Response {
     public AuthToken getAuthToken() {
         return authToken;
     }
+
+    @Override
+    public String toString() {
+        return "LoginResponse{" +
+                "success=" + this.isSuccess() +
+                ", message='" + this.getMessage() + '\'' +
+                ", user=" + user +
+                ", authToken=" + authToken +
+                '}';
+    }
 }

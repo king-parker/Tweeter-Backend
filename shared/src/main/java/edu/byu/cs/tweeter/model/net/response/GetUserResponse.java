@@ -18,4 +18,13 @@ public class GetUserResponse extends Response {
     public User getUser() {
         return user;
     }
+
+    @Override
+    public String toString() {
+        return "GetUserResponse{" +
+                "success=" + this.isSuccess() +
+                ", message='" + this.getMessage() + '\'' +
+                ", user=" + user +
+                '}';
+    }
 }

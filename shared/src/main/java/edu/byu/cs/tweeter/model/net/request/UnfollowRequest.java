@@ -36,4 +36,14 @@ public class UnfollowRequest extends AuthorizedRequest {
     public void setUnfolloweeAlias(String unfolloweeAlias) {
         this.unfolloweeAlias = unfolloweeAlias;
     }
+
+    @Override
+    public String toString() {
+        return "UnfollowRequest{" +
+                "authToken=" + this.getAuthToken() +
+                ", currUserAlias='" + this.getCurrUserAlias() + '\'' +
+                ", followerAlias='" + followerAlias + '\'' +
+                ", unfolloweeAlias='" + unfolloweeAlias + '\'' +
+                '}';
+    }
 }

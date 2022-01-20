@@ -2,6 +2,9 @@ package edu.byu.cs.tweeter.server.service;
 
 import edu.byu.cs.tweeter.model.net.request.AuthorizedRequest;
 import edu.byu.cs.tweeter.server.dao.*;
+import edu.byu.cs.tweeter.server.dao.dummy.DummyDAOFactory;
+import edu.byu.cs.tweeter.server.dao.dynamo.DynamoDAOFactory;
+import edu.byu.cs.tweeter.server.lambda.config.HandlerConfig;
 
 public class Service {
 
@@ -11,6 +14,17 @@ public class Service {
     public static final String SERVER_ERROR_TAG = "[InternalServerError]";
 
     /**
+     * By default, service classes use the DAOFactory provided in the HandlerConfig
+     */
+    public Service() {
+        this(HandlerConfig.getInstance().getFactory());
+    }
+
+    public Service(DAOFactory daoFactory) {
+        DAOFactory.setInstance(daoFactory);
+    }
+
+    /**
      * Returns an instance of {@link AuthDAO}. Allows mocking of the AuthDAO class
      * for testing purposes. All usages of AuthDAO should get their AuthDAO
      * instance from this method to allow for mocking of the instance.
@@ -18,7 +32,7 @@ public class Service {
      * @return the instance.
      */
     public AuthDAO getAuthDAO() {
-        return new AuthDAO();
+        return DAOFactory.getInstance().getAuthDAO();
     }
 
     /**
@@ -29,7 +43,7 @@ public class Service {
      * @return the instance.
      */
     public FeedDAO getFeedDAO() {
-        return new FeedDAO();
+        return DAOFactory.getInstance().getFeedDAO();
     }
 
     /**
@@ -40,7 +54,7 @@ public class Service {
      * @return the instance.
      */
     public FollowDAO getFollowingDAO() {
-        return new FollowDAO();
+        return DAOFactory.getInstance().getFollowDAO();
     }
 
     /**
@@ -51,7 +65,7 @@ public class Service {
      * @return the instance.
      */
     public StoryDAO getStoryDAO() {
-        return new StoryDAO();
+        return DAOFactory.getInstance().getStoryDAO();
     }
 
     /**
@@ -62,7 +76,7 @@ public class Service {
      * @return the instance.
      */
     public UserDAO getUserDAO() {
-        return new UserDAO();
+        return DAOFactory.getInstance().getUserDAO();
     }
 
     public void authenticateRequest(AuthorizedRequest request) {

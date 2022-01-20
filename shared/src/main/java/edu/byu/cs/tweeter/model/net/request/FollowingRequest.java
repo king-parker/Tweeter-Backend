@@ -93,4 +93,15 @@ public class FollowingRequest extends AuthorizedRequest {
     public void setLastFolloweeAlias(String lastFolloweeAlias) {
         this.lastFolloweeAlias = lastFolloweeAlias;
     }
+
+    @Override
+    public String toString() {
+        return "FollowingRequest{" +
+                "authToken=" + this.getAuthToken() +
+                ", currUserAlias='" + this.getCurrUserAlias() + '\'' +
+                ", followerAlias='" + followerAlias + '\'' +
+                ", limit=" + limit +
+                ", lastFolloweeAlias='" + lastFolloweeAlias + '\'' +
+                '}';
+    }
 }

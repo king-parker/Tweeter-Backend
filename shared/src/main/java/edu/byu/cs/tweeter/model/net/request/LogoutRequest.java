@@ -9,4 +9,12 @@ public class LogoutRequest extends AuthorizedRequest {
     public LogoutRequest(AuthToken authToken, String currUserAlias) {
         super(authToken, currUserAlias);
     }
+
+    @Override
+    public String toString() {
+        return "LogoutRequest{" +
+                "authToken=" + this.getAuthToken() +
+                ", currUserAlias='" + this.getCurrUserAlias() + '\'' +
+                '}';
+    }
 }

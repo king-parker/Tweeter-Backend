@@ -36,4 +36,14 @@ public class StoryResponse extends PagedResponse {
     public int hashCode() {
         return Objects.hash(story);
     }
+
+    @Override
+    public String toString() {
+        return "StoryResponse{" +
+                "success=" + this.isSuccess() +
+                ", message='" + this.getMessage() + '\'' +
+                ", hasMorePages=" + this.getHasMorePages() +
+                ", story=" + story +
+                '}';
+    }
 }

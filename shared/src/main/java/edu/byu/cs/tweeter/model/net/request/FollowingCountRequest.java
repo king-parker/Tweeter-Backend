@@ -20,4 +20,13 @@ public class FollowingCountRequest extends AuthorizedRequest {
     public void setFollowerAlias(String followerAlias) {
         this.followerAlias = followerAlias;
     }
+
+    @Override
+    public String toString() {
+        return "FollowingCountRequest{" +
+                "authToken=" + this.getAuthToken() +
+                ", currUserAlias='" + this.getCurrUserAlias() + '\'' +
+                ", followerAlias='" + followerAlias + '\'' +
+                '}';
+    }
 }
